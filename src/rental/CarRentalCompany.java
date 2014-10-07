@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CarRentalCompany {
+public class CarRentalCompany implements ICarRentalCompany{
 
 	private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
 	
@@ -78,7 +78,7 @@ public class CarRentalCompany {
 	 * CARS *
 	 *********/
 	
-	private Car getCar(int uid) {
+	public Car getCar(int uid) {
 		for (Car car : cars) {
 			if (car.getId() == uid)
 				return car;
@@ -86,7 +86,7 @@ public class CarRentalCompany {
 		throw new IllegalArgumentException("<" + name + "> No car with uid " + uid);
 	}
 	
-	private List<Car> getAvailableCars(String carType, Date start, Date end) {
+	public List<Car> getAvailableCars(String carType, Date start, Date end) {
 		List<Car> availableCars = new LinkedList<Car>();
 		for (Car car : cars) {
 			if (car.getType().getName().equals(carType) && car.isAvailable(start, end)) {
@@ -117,7 +117,7 @@ public class CarRentalCompany {
 	}
 
 	// Implementation can be subject to different pricing strategies
-	private double calculateRentalPrice(double rentalPricePerDay, Date start, Date end) {
+	public double calculateRentalPrice(double rentalPricePerDay, Date start, Date end) {
 		return rentalPricePerDay * Math.ceil((end.getTime() - start.getTime())
 						/ (1000 * 60 * 60 * 24D));
 	}
