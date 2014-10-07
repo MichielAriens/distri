@@ -13,10 +13,11 @@ import java.util.StringTokenizer;
 public class RentalServer {
 
 	public static void main(String[] args) throws ReservationException, NumberFormatException, IOException {
+		LocateRegistry.createRegistry(1099);
 		List<Car> cars = loadData("hertz.csv");
 			System.setSecurityManager(null);
 			try {
-				String name = "crc";
+				String name = "Hertz";
 				ICarRentalCompany crc = new CarRentalCompany(name,cars);
 				ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
 				Registry registry = LocateRegistry.getRegistry();
