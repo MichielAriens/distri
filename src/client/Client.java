@@ -1,12 +1,22 @@
 package client;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
 
+import rental.CarType;
+import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
 
 public class Client extends AbstractScriptedSimpleTest {
+	
+	Registry registry;
+	ICarRentalCompany crc;
+	
 	
 	/********
 	 * MAIN *
@@ -27,8 +37,16 @@ public class Client extends AbstractScriptedSimpleTest {
 	
 	public Client(String scriptFile, String carRentalCompanyName) {
 		super(scriptFile);
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		try {
+			this.registry = LocateRegistry.getRegistry("localhost", 1099);
+			this.crc = (ICarRentalCompany) registry.lookup(carRentalCompanyName);			
+		} catch (RemoteException e) {
+			//e.printStackTrace();
+			throw new RuntimeException("Could not connect to registry!");
+		} catch (NotBoundException e) {
+			//e.printStackTrace();
+			throw new RuntimeException("The car rental company specified was not found on the registry.");
+		}
 	}
 	
 	/**
@@ -44,8 +62,9 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected void checkForAvailableCarTypes(Date start, Date end) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		for (CarType ct  : crc.getAvailableCarTypes(start, end)){
+			System.out.println(ct.getName());
+		}
 	}
 
 	/**
