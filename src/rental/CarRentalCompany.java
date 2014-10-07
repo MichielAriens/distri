@@ -138,7 +138,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return res;
 	}
 
-	public void cancelReservation(Reservation res) {
+	public void cancelReservation(Reservation res) throws ReservationException {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
 	}

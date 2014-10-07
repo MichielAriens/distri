@@ -18,8 +18,7 @@ public class RentalServer {
 			try {
 				String name = "crc";
 				ICarRentalCompany crc = new CarRentalCompany(name,cars);
-				ICarRentalCompany stub =
-						(ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
+				ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
 				Registry registry = LocateRegistry.getRegistry();
 				registry.rebind(name, stub);
 				System.out.println("CarRentalCompany bound");
