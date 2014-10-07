@@ -86,7 +86,8 @@ public class Client extends AbstractScriptedSimpleTest {
 	@Override
 	protected Quote createQuote(String clientName, Date start, Date end,
 			String carType) throws Exception {
-		// TODO Auto-generated method stub
+		crc.getCarType(carType).getRentalPricePerDay();
+		IQuote quote = new Quote(clientName, start, end, ,carType, )
 		throw new UnsupportedOperationException("TODO");
 	}
 
