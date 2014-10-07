@@ -1,5 +1,8 @@
 package rental;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +44,24 @@ public class CarRentalCompany implements ICarRentalCompany{
 
 	private void setName(String name) {
 		this.name = name;
+	}
+	
+	public static void main() {
+		System.setSecurityManager(null);
+		try {
+			String name = "crc";
+			ICarRentalCompany crc = new CarRentalCompany(name,null);
+			ICarRentalCompany stub =
+					(ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
+			Registry registry = LocateRegistry.getRegistry();
+			registry.rebind(name, stub);
+			System.out.println("CarRentalCompany bound");
+		}
+		catch(Exception e) {
+			System.err.println("Exception");
+			e.printStackTrace();
+			
+		}
 	}
 
 	/*************
