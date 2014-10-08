@@ -7,12 +7,15 @@ import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
 
+import rental.Car;
 import rental.CarType;
 import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
 
 public class Client extends AbstractScriptedSimpleTest {
+	
+	public static String carRentalCompanyName = "Hertz";
 	
 	Registry registry;
 	ICarRentalCompany crc;
@@ -22,10 +25,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	 * MAIN *
 	 ********/
 	
-	public static void main(String[] args) throws Exception {
-		
-		String carRentalCompanyName = "Hertz";
-		
+	public static void main(String[] args) throws Exception {		
 		// An example reservation scenario on car rental company 'Hertz' would be...
 		Client client = new Client("simpleTrips", carRentalCompanyName);
 		client.run();
@@ -86,9 +86,9 @@ public class Client extends AbstractScriptedSimpleTest {
 	@Override
 	protected Quote createQuote(String clientName, Date start, Date end,
 			String carType) throws Exception {
-		crc.getCarType(carType).getRentalPricePerDay();
-		IQuote quote = new Quote(clientName, start, end, ,carType, )
-		throw new UnsupportedOperationException("TODO");
+		double dayprice = crc.getCarType(carType).getRentalPricePerDay();
+		double price = crc.calculateRentalPrice(dayprice, start, end);
+		return new Quote(clientName, start, end, carRentalCompanyName, carType, price );
 	}
 
 	/**
@@ -103,8 +103,12 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected Reservation confirmQuote(Quote quote) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		try{
+			Car car = crc.getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate()).get(0);
+			return new Reservation(quote, car.getId());
+		}catch (IndexOutOfBoundsException e){
+			throw new Exception(String.format("No cars available for %s", quote.getCarRenter()));
+		}
 	}
 	
 	/**
@@ -119,8 +123,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected List<Reservation> getReservationsBy(String clientName) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		return null;
 	}
 
 	/**
@@ -136,6 +139,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		//throw new UnsupportedOperationException("TODO");
+		return 0;
 	}
 }

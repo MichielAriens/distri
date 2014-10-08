@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 public class RentalServer {
 
 	public static void main(String[] args) throws ReservationException, NumberFormatException, IOException {
-		LocateRegistry.createRegistry(1099);
+		//LocateRegistry.createRegistry(1099);
 		List<Car> cars = loadData("hertz.csv");
 			System.setSecurityManager(null);
 			try {
