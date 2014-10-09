@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import rental.CarType;
@@ -125,7 +126,15 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected List<Reservation> getReservationsBy(String clientName) throws Exception {
-		return crc.getReservationsBy(clientName);
+		List<Reservation> reservationsBy = crc.getReservationsBy(clientName);
+		for(Reservation reservation: reservationsBy){
+			System.out.println(reservation.getCarType() + " " 
+					+ reservation.getCarId() + " " 
+					+ reservation.getStartDate() + " - " 
+					+ reservation.getEndDate() + " "
+					+ reservation.getRentalPrice());
+		}
+		return reservationsBy;
 	}
 
 	/**
@@ -140,8 +149,15 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
-		// TODO Auto-generated method stub
-		//throw new UnsupportedOperationException("TODO");
-		return 0;
+		int numberOfRes = 0;
+		for (Car car : crc.getCars()) {
+			List<Reservation> reservations = car.getReservations();
+			for(Reservation reservation: reservations){
+				if(reservation.getCarType().equals(carType)){
+					numberOfRes++;
+				}
+			}
+		}
+		return numberOfRes;
 	}
 }
