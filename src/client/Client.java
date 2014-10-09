@@ -7,11 +7,9 @@ import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
 
-import rental.Car;
 import rental.CarType;
 import rental.ICar;
 import rental.ICarRentalCompany;
-import rental.IReservation;
 import rental.Quote;
 import rental.Reservation;
 
@@ -109,7 +107,7 @@ public class Client extends AbstractScriptedSimpleTest {
 			ICar car = crc.getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate()).get(0);
 			Reservation reservation = new Reservation(quote, car.getId());
 			car.addReservation(reservation);
-			return (Reservation) reservation;
+			return reservation;
 		}catch (IndexOutOfBoundsException e){
 			throw new Exception(String.format("No cars available for %s", quote.getCarRenter()));
 		}

@@ -7,6 +7,7 @@ import java.rmi.registry.Registry;
 import java.util.List;
 
 import rental.Car;
+import rental.ICar;
 import rental.ICarRentalCompany;
 import rental.Reservation;
 
@@ -44,8 +45,8 @@ public class Test {
 	}
 	
 	public void getAllCars() throws RemoteException{
-		List<Car> cars = crc.getCars();
-		for(Car car : cars){
+		List<ICar> cars = crc.getCars();
+		for(ICar car : cars){
 			System.out.println(car.getId());
 			for( Reservation res : car.getReservations()){
 				System.out.println("    " + res.getCarRenter());

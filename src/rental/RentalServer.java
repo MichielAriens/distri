@@ -14,12 +14,17 @@ public class RentalServer {
 
 	public static void main(String[] args) throws ReservationException, NumberFormatException, IOException {
 		//LocateRegistry.createRegistry(1099);
-		List<Car> cars = loadData("hertz.csv");
+		List<ICar> cars = loadData("hertz.csv");
 			System.setSecurityManager(null);
 			try {
 				String name = "Hertz";
 				ICarRentalCompany crc = new CarRentalCompany(name,cars);
+				for(ICar car : cars){
+					UnicastRemoteObject.exportObject(car, 0);
+				}
+				
 				ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
+				
 				Registry registry = LocateRegistry.getRegistry();
 				registry.rebind(name, stub);
 				System.out.println("CarRentalCompany bound");
@@ -32,10 +37,10 @@ public class RentalServer {
 		}
 	}
 
-	public static List<Car> loadData(String datafile)
+	public static List<ICar> loadData(String datafile)
 			throws ReservationException, NumberFormatException, IOException {
 
-		List<Car> cars = new LinkedList<Car>();
+		List<ICar> cars = new LinkedList<ICar>();
 
 		int nextuid = 0;
 		

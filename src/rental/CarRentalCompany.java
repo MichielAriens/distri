@@ -1,5 +1,6 @@
 package rental;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -19,18 +20,19 @@ public class CarRentalCompany implements ICarRentalCompany{
 	private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
 	
 	private String name;
-	private List<Car> cars;
+	private List<ICar> cars;
 	private Map<String,CarType> carTypes = new HashMap<String, CarType>();
 
 	/***************
-	 * CONSTRUCTOR *
+	 * CONSTRUCTOR 
+	 * @throws RemoteException *
 	 ***************/
 
-	public CarRentalCompany(String name, List<Car> cars) {
+	public CarRentalCompany(String name, List<ICar> cars) throws RemoteException {
 		logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);
 		setName(name);
 		this.cars = cars;
-		for(Car car:cars)
+		for(ICar car:cars)
 			carTypes.put(car.getType().getName(), car.getType());
 	}
 
@@ -60,16 +62,16 @@ public class CarRentalCompany implements ICarRentalCompany{
 		throw new IllegalArgumentException("<" + carTypeName + "> No car type of name " + carTypeName);
 	}
 	
-	public boolean isAvailable(String carTypeName, Date start, Date end) {
+	public boolean isAvailable(String carTypeName, Date start, Date end) throws RemoteException {
 		logger.log(Level.INFO, "<{0}> Checking availability for car type {1}", new Object[]{name, carTypeName});
 		if(carTypes.containsKey(carTypeName))
 			return getAvailableCarTypes(start, end).contains(carTypes.get(carTypeName));
 		throw new IllegalArgumentException("<" + carTypeName + "> No car type of name " + carTypeName);
 	}
 	
-	public Set<CarType> getAvailableCarTypes(Date start, Date end) {
+	public Set<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
 		Set<CarType> availableCarTypes = new HashSet<CarType>();
-		for (Car car : cars) {
+		for (ICar car : cars) {
 			if (car.isAvailable(start, end)) {
 				availableCarTypes.add(car.getType());
 			}
@@ -78,20 +80,21 @@ public class CarRentalCompany implements ICarRentalCompany{
 	}
 	
 	/*********
-	 * CARS *
+	 * CARS 
+	 * @throws RemoteException *
 	 *********/
 	
-	public Car getCar(int uid) {
-		for (Car car : cars) {
+	public ICar getCar(int uid) throws RemoteException {
+		for (ICar car : cars) {
 			if (car.getId() == uid)
 				return car;
 		}
 		throw new IllegalArgumentException("<" + name + "> No car with uid " + uid);
 	}
 	
-	public List<Car> getAvailableCars(String carType, Date start, Date end) {
-		List<Car> availableCars = new LinkedList<Car>();
-		for (Car car : cars) {
+	public List<ICar> getAvailableCars(String carType, Date start, Date end) throws RemoteException {
+		List<ICar> availableCars = new LinkedList<ICar>();
+		for (ICar car : cars) {
 			if (car.getType().getName().equals(carType) && car.isAvailable(start, end)) {
 				availableCars.add(car);
 			}
@@ -100,11 +103,12 @@ public class CarRentalCompany implements ICarRentalCompany{
 	}
 
 	/****************
-	 * RESERVATIONS *
+	 * RESERVATIONS 
+	 * @throws RemoteException *
 	 ****************/
 
 	public Quote createQuote(ReservationConstraints constraints, String client)
-			throws ReservationException {
+			throws ReservationException, RemoteException {
 		logger.log(Level.INFO, "<{0}> Creating tentative reservation for {1} with constraints {2}", 
                         new Object[]{name, client, constraints.toString()});
 		
@@ -125,27 +129,27 @@ public class CarRentalCompany implements ICarRentalCompany{
 						/ (1000 * 60 * 60 * 24D));
 	}
 
-	public Reservation confirmQuote(Quote quote) throws ReservationException {
+	public Reservation confirmQuote(Quote quote) throws ReservationException, RemoteException {
 		logger.log(Level.INFO, "<{0}> Reservation of {1}", new Object[]{name, quote.toString()});
-		List<Car> availableCars = getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate());
+		List<ICar> availableCars = getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate());
 		if(availableCars.isEmpty())
 			throw new ReservationException("Reservation failed, all cars of type " + quote.getCarType()
 	                + " are unavailable from " + quote.getStartDate() + " to " + quote.getEndDate());
-		Car car = availableCars.get((int)(Math.random()*availableCars.size()));
+		ICar car = availableCars.get((int)(Math.random()*availableCars.size()));
 		
 		Reservation res = new Reservation(quote, car.getId());
 		car.addReservation(res);
 		return res;
 	}
 
-	public void cancelReservation(Reservation res) throws ReservationException {
+	public void cancelReservation(Reservation res) throws ReservationException, RemoteException {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
 	}  
 	
-	public List<Reservation> getReservationsBy(String carRenter){
+	public List<Reservation> getReservationsBy(String carRenter) throws RemoteException{
 		List<Reservation> requestedReservations = new LinkedList<Reservation>();
-		for (Car car : cars) {
+		for (ICar car : cars) {
 			List<Reservation> reservations = car.getReservations();
 			for(Reservation reservation: reservations){
 				if(reservation.getCarRenter().equals(carRenter)){
@@ -156,7 +160,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return requestedReservations;
 	}
 	
-	public List<Car> getCars(){
+	public List<ICar> getCars(){
 		return this.cars;
 	}
 }
