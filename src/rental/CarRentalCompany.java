@@ -141,6 +141,19 @@ public class CarRentalCompany implements ICarRentalCompany{
 	public void cancelReservation(Reservation res) throws ReservationException {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
+	}  
+	
+	public List<Reservation> getReservationsBy(String carRenter){
+		List<Reservation> requestedReservations = new LinkedList<Reservation>();
+		for (Car car : cars) {
+			List<Reservation> reservations = car.getReservations();
+			for(Reservation reservation: reservations){
+				if(reservation.getCarRenter().equals(carRenter)){
+					requestedReservations.add(reservation);
+				}
+			}
+		}
+		return requestedReservations;
 	}
 	
 	public List<Car> getCars(){

@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public interface ICarRentalCompany extends Remote{
+	
 	public Collection<CarType> getAllCarTypes() throws RemoteException;
 	
 	public CarType getCarType(String carTypeName) throws RemoteException;
@@ -35,5 +36,7 @@ public interface ICarRentalCompany extends Remote{
 	
 	public void cancelReservation(Reservation res) throws ReservationException, RemoteException;
 	
+	public List<Reservation> getReservationsBy(String carRenter) throws RemoteException;
+
 	public List<Car> getCars() throws RemoteException;
 }
