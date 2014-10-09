@@ -61,4 +61,8 @@ public class Car implements Serializable{
         // equals-method for Reservation is required!
         reservations.remove(reservation);
     }
+    
+    public List<Reservation> getReservations(){
+    	return this.reservations;
+    }
 }

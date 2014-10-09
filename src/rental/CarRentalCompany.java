@@ -155,4 +155,8 @@ public class CarRentalCompany implements ICarRentalCompany{
 		}
 		return requestedReservations;
 	}
+	
+	public List<Car> getCars(){
+		return this.cars;
+	}
 }
