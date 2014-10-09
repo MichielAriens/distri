@@ -123,7 +123,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected List<Reservation> getReservationsBy(String clientName) throws Exception {
-		return null;
+		return crc.getReservationsBy(clientName);
 	}
 
 	/**
