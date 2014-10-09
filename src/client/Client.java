@@ -150,7 +150,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
 		int numberOfRes = 0;
-		for (Car car : crc.getCars()) {
+		for (ICar car : crc.getCars()) {
 			List<Reservation> reservations = car.getReservations();
 			for(Reservation reservation: reservations){
 				if(reservation.getCarType().equals(carType)){
