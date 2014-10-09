@@ -1,0 +1,4 @@
+logic uitgevoerd in client: maar op server gaat ook en dan kan car serializable. In feite moet geen enkel Car obj doorgestuurd worden dan
+
+quote wordt even door client bijgehouden -> quote wordt remote | reservation echter niet?
+
