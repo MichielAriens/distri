@@ -123,7 +123,15 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected List<Reservation> getReservationsBy(String clientName) throws Exception {
-		return crc.getReservationsBy(clientName);
+		List<Reservation> reservationsBy = crc.getReservationsBy(clientName);
+		for(Reservation reservation: reservationsBy){
+			System.out.println(reservation.getCarType() + " " 
+					+ reservation.getCarId() + " " 
+					+ reservation.getStartDate() + " - " 
+					+ reservation.getEndDate() + " "
+					+ reservation.getRentalPrice());
+		}
+		return reservationsBy;
 	}
 
 	/**
