@@ -147,19 +147,6 @@ public class CarRentalCompany implements ICarRentalCompany{
 		getCar(res.getCarId()).removeReservation(res);
 	}  
 	
-	public List<Reservation> getReservationsBy(String carRenter) throws RemoteException{
-		List<Reservation> requestedReservations = new LinkedList<Reservation>();
-		for (ICar car : cars) {
-			List<Reservation> reservations = car.getReservations();
-			for(Reservation reservation: reservations){
-				if(reservation.getCarRenter().equals(carRenter)){
-					requestedReservations.add(reservation);
-				}
-			}
-		}
-		return requestedReservations;
-	}
-	
 	public List<ICar> getCars(){
 		return this.cars;
 	}
