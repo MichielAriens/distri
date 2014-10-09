@@ -2,7 +2,7 @@ package rental;
 
 import java.util.Date;
 
-public class Quote {
+public class Quote implements IQuote{
 
     private Date startDate;
     private Date endDate;

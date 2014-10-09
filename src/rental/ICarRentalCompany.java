@@ -34,4 +34,6 @@ public interface ICarRentalCompany extends Remote{
 	public Reservation confirmQuote(Quote quote) throws ReservationException, RemoteException;
 	
 	public void cancelReservation(Reservation res) throws ReservationException, RemoteException;
+	
+	public List<Car> getCars() throws RemoteException;
 }

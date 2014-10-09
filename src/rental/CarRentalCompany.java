@@ -142,4 +142,8 @@ public class CarRentalCompany implements ICarRentalCompany{
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
 	}
+	
+	public List<Car> getCars(){
+		return this.cars;
+	}
 }
