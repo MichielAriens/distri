@@ -46,8 +46,9 @@ public class Test {
 	public void getAllCars() throws RemoteException{
 		List<Car> cars = crc.getCars();
 		for(Car car : cars){
+			System.out.println(car.getId());
 			for( Reservation res : car.getReservations()){
-				
+				System.out.println("    " + res.getCarRenter());
 			}
 		}
 	}
