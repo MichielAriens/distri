@@ -13,6 +13,8 @@ import rental.ICar;
 import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
+import rental.ReservationConstraints;
+import rental.ReservationException;
 
 public class Client extends AbstractScriptedSimpleTest {
 	
@@ -87,9 +89,9 @@ public class Client extends AbstractScriptedSimpleTest {
 	@Override
 	protected Quote createQuote(String clientName, Date start, Date end,
 			String carType) throws Exception {
-		double dayprice = crc.getCarType(carType).getRentalPricePerDay();
-		double price = crc.calculateRentalPrice(dayprice, start, end);
-		return new Quote(clientName, start, end, carRentalCompanyName, carType, price );
+		ReservationConstraints cons = new ReservationConstraints(start, end, carType);
+		Quote quote = crc.createQuote(cons, clientName);
+		return quote;
 	}
 
 	/**
@@ -105,12 +107,9 @@ public class Client extends AbstractScriptedSimpleTest {
 	@Override
 	protected Reservation confirmQuote(Quote quote) throws Exception {
 		try{
-			ICar car = crc.getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate()).get(0);
-			Reservation reservation = new Reservation(quote, car.getId());
-			car.addReservation(reservation);
-			return reservation;
-		}catch (IndexOutOfBoundsException e){
-			throw new Exception(String.format("No cars available for %s", quote.getCarRenter()));
+			return crc.confirmQuote(quote);
+		}catch (ReservationException e){
+			throw new Exception("Quote could not be confirmed");
 		}
 	}
 	
