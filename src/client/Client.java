@@ -125,23 +125,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected List<Reservation> getReservationsBy(String clientName) throws Exception {
-		List<Reservation> requestedReservations = new LinkedList<Reservation>();
-		for (ICar car : crc.getCars()) {
-			List<Reservation> reservations = car.getReservations();
-			for(Reservation reservation: reservations){
-				if(reservation.getCarRenter().equals(clientName)){
-					requestedReservations.add(reservation);
-				}
-			}
-		}
-		return requestedReservations;
-		//for(Reservation reservation: reservationsBy){
-//			System.out.println(reservation.getCarType() + " " 
-//					+ reservation.getCarId() + " " 
-//					+ reservation.getStartDate() + " - " 
-//					+ reservation.getEndDate() + " "
-//					+ reservation.getRentalPrice());
-//		}
+		return crc.getReservationsBy(clientName);
 	}
 
 	/**
@@ -156,15 +140,6 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
-		int numberOfRes = 0;
-		for (ICar car : crc.getCars()) {
-			List<Reservation> reservations = car.getReservations();
-			for(Reservation reservation: reservations){
-				if(reservation.getCarType().equals(carType)){
-					numberOfRes++;
-				}
-			}
-		}
-		return numberOfRes;
+		return crc.getNumberOfReservationsForCarType(carType);
 	}
 }

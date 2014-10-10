@@ -144,6 +144,32 @@ public class CarRentalCompany implements ICarRentalCompany{
 		getCar(res.getCarId()).removeReservation(res);
 	}  
 	
+	public List<Reservation> getReservationsBy(String clientName) throws RemoteException{
+		List<Reservation> requestedReservations = new LinkedList<Reservation>();
+		for (ICar car : cars) {
+			List<Reservation> reservations = car.getReservations();
+			for(Reservation reservation: reservations){
+				if(reservation.getCarRenter().equals(clientName)){
+					requestedReservations.add(reservation);
+				}
+			}
+		}
+		return requestedReservations;
+	}
+	
+	public int getNumberOfReservationsForCarType(String carType) throws RemoteException{
+		int numberOfRes = 0;
+		for (ICar car : cars) {
+			List<Reservation> reservations = car.getReservations();
+			for(Reservation reservation: reservations){
+				if(reservation.getCarType().equals(carType)){
+					numberOfRes++;
+				}
+			}
+		}
+		return numberOfRes;
+	}
+	
 	public List<ICar> getCars(){
 		return this.cars;
 	}
