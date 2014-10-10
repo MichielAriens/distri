@@ -89,6 +89,7 @@ public class Client extends AbstractScriptedSimpleTest {
 			String carType) throws Exception {
 		ReservationConstraints cons = new ReservationConstraints(start, end, carType);
 		Quote quote = crc.createQuote(cons, clientName);
+		System.out.println(quote.toString());
 		return quote;
 	}
 
@@ -123,7 +124,11 @@ public class Client extends AbstractScriptedSimpleTest {
 	 */
 	@Override
 	protected List<Reservation> getReservationsBy(String clientName) throws Exception {
-		return crc.getReservationsBy(clientName);
+		List<Reservation> reservations = crc.getReservationsBy(clientName);
+		for(Reservation reservation: reservations){
+			System.out.println(reservation.toString());
+		}
+		return reservations;
 	}
 
 	/**
