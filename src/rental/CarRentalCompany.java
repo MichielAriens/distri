@@ -147,7 +147,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 
 	public List<Reservation> getReservationsBy(String clientName) throws RemoteException{
 		List<Reservation> requestedReservations = new LinkedList<Reservation>();
-		for (ICar car : cars) {
+		for (Car car : cars) {
 			List<Reservation> reservations = car.getReservations();
 			for(Reservation reservation: reservations){
 				if(reservation.getCarRenter().equals(clientName)){
@@ -160,7 +160,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 	
 	public int getNumberOfReservationsForCarType(String carType) throws RemoteException{
 		int numberOfRes = 0;
-		for (ICar car : cars) {
+		for (Car car : cars) {
 			List<Reservation> reservations = car.getReservations();
 			for(Reservation reservation: reservations){
 				if(reservation.getCarType().equals(carType)){
@@ -169,9 +169,5 @@ public class CarRentalCompany implements ICarRentalCompany{
 			}
 		}
 		return numberOfRes;
-	}
-	
-	public List<ICar> getCars(){
-		return this.cars;
 	}
 }
