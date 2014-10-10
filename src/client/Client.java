@@ -135,13 +135,6 @@ public class Client extends AbstractScriptedSimpleTest {
 			}
 		}
 		return requestedReservations;
-		//for(Reservation reservation: reservationsBy){
-//			System.out.println(reservation.getCarType() + " " 
-//					+ reservation.getCarId() + " " 
-//					+ reservation.getStartDate() + " - " 
-//					+ reservation.getEndDate() + " "
-//					+ reservation.getRentalPrice());
-//		}
 	}
 
 	/**
