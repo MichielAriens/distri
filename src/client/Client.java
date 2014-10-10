@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import rental.CarType;
-import rental.ICar;
 import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
