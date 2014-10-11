@@ -23,7 +23,8 @@ hs_err_pid*
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -51,3 +52,7 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 /bin/
+/task2/CarRental/nbproject/private/
+/task2/CarRental-ejb/nbproject/private/
+/task2/CarRental-client/nbproject/private/
+/task2/CarRental-lib/nbproject/private/
