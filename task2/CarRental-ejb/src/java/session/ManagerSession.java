@@ -22,7 +22,7 @@ import rental.RentalStore;
 
 /**
  *
- * @author Julie
+ * @author Julie & Michiel
  */
 @Stateless
 public class ManagerSession implements ManagerSessionRemote {
@@ -35,7 +35,6 @@ public class ManagerSession implements ManagerSessionRemote {
         }
         return retval;
     }
-    
     
     public Set<CarType> getCarTypesForCompany(String rentalCompany) {
         CarRentalCompany crc = RentalStore.getRentals().get(rentalCompany);
