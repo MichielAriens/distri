@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import rental.ReservationConstraints;
 import rental.ReservationException;
 import session.CarRentalSessionRemote;
@@ -11,25 +12,31 @@ import session.ManagerSessionRemote;
 
 public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote, ManagerSessionRemote>{
     
-    @EJB
-    static CarRentalSessionRemote session;
+    //@EJB
+    //static CarRentalSessionRemote session;
     
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("found rental companies: "+session.getAllRentalCompanies());
+        //System.out.println("found rental companies: "+session.getAllRentalCompanies());
     }
 
     @Override
     protected CarRentalSessionRemote getNewReservationSession(String name) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InitialContext context = new InitialContext();
+        CarRentalSessionRemote session = (CarRentalSessionRemote) context.lookup(CarRentalSessionRemote.class.getName());
+        session.setClientName(name);
+        return session;
     }
 
     @Override
     protected ManagerSessionRemote getNewManagerSession(String name, String carRentalName) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InitialContext context = new InitialContext();
+        ManagerSessionRemote session = (ManagerSessionRemote) context.lookup(ManagerSessionRemote.class.getName());
+        session.setClientName(name);
+        return session;
     }
 
     @Override
