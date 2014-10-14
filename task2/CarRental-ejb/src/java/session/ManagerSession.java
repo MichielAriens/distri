@@ -5,7 +5,11 @@
  */
 package session;
 
+import java.util.Set;
 import javax.ejb.Stateless;
+import rental.CarRentalCompany;
+import rental.CarType;
+import rental.RentalStore;
 
 /**
  *
@@ -14,6 +18,24 @@ import javax.ejb.Stateless;
 @Stateless
 public class ManagerSession implements ManagerSessionRemote {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @Override
+    public Set<CarType> getCarTypesForCompany(String rentalCompany) {
+        CarRentalCompany crc = RentalStore.getRentals().get(rentalCompany);
+        return (Set)crc.getAllTypes();
+    }
+
+    @Override
+    public int getNumberOfReservationsForCarType(String rentalCompany, String carType) {
+        Set<CarType> carTypes = this.getCarTypesForCompany(rentalCompany);
+        int numberOfRes = 0;
+        for(CarType type: carTypes){
+            if(type.getName().equals(carType)){
+                numberOfRes ++;
+            }
+        }
+        return numberOfRes;
+    }
+
+    
+    
 }
