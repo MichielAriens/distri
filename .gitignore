@@ -8,6 +8,9 @@
 *.war
 *.ear
 
+# Project Files #
+*.project
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -56,3 +59,11 @@ $RECYCLE.BIN/
 /task2/CarRental-ejb/nbproject/private/
 /task2/CarRental-client/nbproject/private/
 /task2/CarRental-lib/nbproject/private/
+/task2/CarRental-lib/build/
+/task2/CarRental-client/dist/
+/task2/CarRental-lib/dist/
+/task2/CarRental-client/build/
+/task2/CarRental/build/
+/task2/CarRental/dist/
+/task2/CarRental-ejb/build/
+/task2/CarRental-ejb/dist/
