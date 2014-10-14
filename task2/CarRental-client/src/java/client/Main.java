@@ -23,8 +23,8 @@ public class Main{
             
             
             session.setClientName("Michiel");
-            ReservationConstraints cons = new ReservationConstraints(new Date(2014, 10, 1), new Date(2014, 10, 10), "PREMIUM");
-            session.createQuote(cons, "hertz");
+            ReservationConstraints cons = new ReservationConstraints(new Date(2014, 10, 1), new Date(2014, 10, 10), "Premium");
+            session.createQuote(cons, "Hertz");
             System.out.println(session.getCurrentQuotes());
             session.confirmQuotes();
             

@@ -1,6 +1,6 @@
 package rental;
 
-public class Reservation extends Quote {
+public class Reservation extends Quote{
 
     private int carId;
     
