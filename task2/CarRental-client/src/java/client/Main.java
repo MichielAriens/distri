@@ -7,8 +7,9 @@ import javax.ejb.EJB;
 import rental.ReservationConstraints;
 import rental.ReservationException;
 import session.CarRentalSessionRemote;
+import session.ManagerSessionRemote;
 
-public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote, ManageSessionRemote>{
+public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote, ManagerSessionRemote>{
     
     @EJB
     static CarRentalSessionRemote session;
@@ -27,7 +28,7 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
     }
 
     @Override
-    protected ManageSessionRemote getNewManagerSession(String name, String carRentalName) throws Exception {
+    protected ManagerSessionRemote getNewManagerSession(String name, String carRentalName) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -47,12 +48,12 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
     }
 
     @Override
-    protected int getNumberOfReservationsBy(ManageSessionRemote ms, String clientName) throws Exception {
+    protected int getNumberOfReservationsBy(ManagerSessionRemote ms, String clientName) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    protected int getNumberOfReservationsForCarType(ManageSessionRemote ms, String carRentalName, String carType) throws Exception {
+    protected int getNumberOfReservationsForCarType(ManagerSessionRemote ms, String carRentalName, String carType) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
