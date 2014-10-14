@@ -7,7 +7,11 @@ package session;
 
 import java.util.Set;
 import javax.ejb.Remote;
+
 import rental.Reservation;
+
+import rental.CarType;
+
 
 /**
  *
@@ -15,7 +19,15 @@ import rental.Reservation;
  */
 @Remote
 public interface ManagerSessionRemote {
+
     Set<Reservation> getReservationsFor(String client);
+
+
+    Set<CarType> getCarTypesForCompany(String rentalCompany);
+
+    int getNumberOfReservationsForCarType(String rentalCompany, String carType);
+    
+
 }
 
     
