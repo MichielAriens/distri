@@ -1,9 +1,11 @@
 package client;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import rental.Reservation;
 import javax.naming.InitialContext;
 import rental.ReservationConstraints;
 import rental.ReservationException;
@@ -61,12 +63,16 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
 
     @Override
     protected int getNumberOfReservationsBy(ManagerSessionRemote ms, String clientName) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Set<Reservation> reservations = ms.getReservationsFor(clientName);
+        int numberOfRes = 0;
+        for(Reservation reservation: reservations){
+            numberOfRes++;
+        }
     }
 
     @Override
     protected int getNumberOfReservationsForCarType(ManagerSessionRemote ms, String carRentalName, String carType) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ms.getNumberOfReservationsForCarType(carRentalName, carType);
     }
     
     /**
