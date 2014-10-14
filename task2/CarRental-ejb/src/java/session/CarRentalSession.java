@@ -45,13 +45,14 @@ public class CarRentalSession implements CarRentalSessionRemote {
                 confirmedReservations.add(crc.confirmQuote(quote));
             }
         }
-        
         catch(ReservationException e){
             for(Reservation reservation: confirmedReservations){
                 CarRentalCompany crc = RentalStore.getRentals().get(reservation.getRentalCompany());
                 crc.cancelReservation(reservation);
             }
                 throw new ReservationException("Confirm quotes failed for: " + clientName);
+        }finally{
+            quotes = new HashSet<Quote>();
         }
     }
 

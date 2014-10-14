@@ -17,7 +17,7 @@ public interface CarRentalSessionRemote {
     
     Set<Quote> getCurrentQuotes();
     
-    void confirmQuotes(Set<Quote> quotes) throws ReservationException;
+    void confirmQuotes() throws ReservationException;
     
     
     
