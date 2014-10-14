@@ -68,12 +68,12 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     @Override
     public Set<CarType> getAvailableCarTypes(Date start, Date end) {
-        //TODO: 
+        Set<CarType> retval = new HashSet<CarType>();
+        for(CarRentalCompany crc : RentalStore.getRentals().values()){
+            retval.addAll(crc.getAvailableCarTypes(start, end));
+        }
+        return retval;
+        //CarRentalCompany crc = RentalStore.getRentals().get(company);
+        //return crc.getAvailableCarTypes(start, end);
     }
-
-    
-    
-
-    
-    
 }

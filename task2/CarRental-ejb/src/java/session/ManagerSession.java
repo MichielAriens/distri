@@ -7,10 +7,6 @@ package session;
 
 
 import java.util.HashSet;
-import java.util.Set;
-import javax.ejb.Stateless;
-import rental.CarRentalCompany;
-import rental.RentalStore;
 import rental.Reservation;
 
 import java.util.Set;

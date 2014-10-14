@@ -21,6 +21,11 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
      */
     public static void main(String[] args) {
         //System.out.println("found rental companies: "+session.getAllRentalCompanies());
+        Main main = new Main("simpleTrips");
+    }
+
+    public Main(String scriptFile) {
+        super(scriptFile);
     }
 
     @Override
@@ -35,13 +40,13 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
     protected ManagerSessionRemote getNewManagerSession(String name, String carRentalName) throws Exception {
         InitialContext context = new InitialContext();
         ManagerSessionRemote session = (ManagerSessionRemote) context.lookup(ManagerSessionRemote.class.getName());
-        session.setClientName(name);
         return session;
     }
 
     @Override
     protected void checkForAvailableCarTypes(CarRentalSessionRemote session, Date start, Date end) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //For all systems. TODO: Check this
+        System.out.println(session.getAvailableCarTypes(start, end));
     }
 
     @Override
