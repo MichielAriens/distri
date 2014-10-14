@@ -32,7 +32,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     @Override
     public Set<Quote> getCurrentQuotes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return quotes;
     }
 
     @Override
@@ -45,10 +45,6 @@ public class CarRentalSession implements CarRentalSessionRemote {
         this.clientName = name;
     }
 
-    @Override
-    public Quote createQuote(ReservationConstraints cons) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     
 
