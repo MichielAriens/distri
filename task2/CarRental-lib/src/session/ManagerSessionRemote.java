@@ -5,7 +5,9 @@
  */
 package session;
 
+import java.util.Set;
 import javax.ejb.Remote;
+import rental.Reservation;
 
 /**
  *
@@ -13,5 +15,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface ManagerSessionRemote {
-    
+    Set<Reservation> getReservationsFor(String client);
 }
+
+    
