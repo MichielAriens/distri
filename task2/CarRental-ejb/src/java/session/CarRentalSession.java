@@ -1,11 +1,13 @@
 package session;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import rental.CarRentalCompany;
+import rental.CarType;
 import rental.Quote;
 import rental.RentalStore;
 import rental.Reservation;
@@ -62,6 +64,11 @@ public class CarRentalSession implements CarRentalSessionRemote {
     @Override
     public void setClientName(String name) {
         this.clientName = name;
+    }
+
+    @Override
+    public Set<CarType> getAvailableCarTypes(Date start, Date end) {
+        //TODO: 
     }
 
     
