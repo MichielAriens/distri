@@ -8,6 +8,7 @@ import javax.ejb.Stateful;
 import rental.CarRentalCompany;
 import rental.Quote;
 import rental.RentalStore;
+import rental.Reservation;
 import rental.ReservationConstraints;
 import rental.ReservationException;
 
@@ -37,7 +38,21 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     @Override
     public void confirmQuotes() throws ReservationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       Set<Reservation> confirmedReservations = new HashSet<Reservation>();
+        try{
+            for(Quote quote: quotes){
+                CarRentalCompany crc = RentalStore.getRentals().get(quote.getRentalCompany());
+                confirmedReservations.add(crc.confirmQuote(quote));
+            }
+        }
+        
+        catch(ReservationException e){
+            for(Reservation reservation: confirmedReservations){
+                CarRentalCompany crc = RentalStore.getRentals().get(reservation.getRentalCompany());
+                crc.cancelReservation(reservation);
+            }
+                throw new ReservationException("Confirm quotes failed for: " + clientName);
+        }
     }
 
     @Override
