@@ -1,14 +1,10 @@
 package client;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import rental.Reservation;
 import javax.naming.InitialContext;
 import rental.ReservationConstraints;
-import rental.ReservationException;
 import session.CarRentalSessionRemote;
 import session.ManagerSessionRemote;
 
@@ -22,8 +18,14 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //System.out.println("found rental companies: "+session.getAllRentalCompanies());
-        Main main = new Main("simpleTrips");
+        try {
+            //System.out.println("found rental companies: "+session.getAllRentalCompanies());
+            Main main = new Main("simpleTrips");
+            main.run();
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Exception caught at top level.");
+            ex.printStackTrace();
+        }
     }
 
     public Main(String scriptFile) {
@@ -53,21 +55,18 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
 
     @Override
     protected void addQuoteToSession(CarRentalSessionRemote session, String name, Date start, Date end, String carType, String carRentalName) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ReservationConstraints cons = new ReservationConstraints(start, end, carType);
+        session.createQuote(cons, carRentalName);
     }
 
     @Override
     protected void confirmQuotes(CarRentalSessionRemote session, String name) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        session.confirmQuotes();
     }
 
     @Override
     protected int getNumberOfReservationsBy(ManagerSessionRemote ms, String clientName) throws Exception {
-        Set<Reservation> reservations = ms.getReservationsFor(clientName);
-        int numberOfRes = 0;
-        for(Reservation reservation: reservations){
-            numberOfRes++;
-        }
+        return ms.getReservationsFor(clientName).size();
     }
 
     @Override
@@ -75,7 +74,11 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
         return ms.getNumberOfReservationsForCarType(carRentalName, carType);
     }
     
-    /**
+    
+}
+
+
+/**
      * try {
             System.out.println("found rental companies: "+session.getAllRentalCompanies());
             
@@ -92,4 +95,3 @@ public class Main extends AbstractScriptedSimpleTripTest<CarRentalSessionRemote,
         }
         **/
     
-}

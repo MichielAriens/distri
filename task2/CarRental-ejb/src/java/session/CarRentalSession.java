@@ -22,14 +22,12 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     @Override
     public Set<String> getAllRentalCompanies() {
-        System.out.println("passed:  get all ...");
         return new HashSet<String>(RentalStore.getRentals().keySet());
         
     }
 
     @Override
     public Quote createQuote(ReservationConstraints cons, String rentalCompany) throws ReservationException{
-        System.out.println("!!!PASSED!!!");
         CarRentalCompany crc = RentalStore.getRentals().get(rentalCompany);
         Quote quote = crc.createQuote(cons, clientName);
         quotes.add(quote);

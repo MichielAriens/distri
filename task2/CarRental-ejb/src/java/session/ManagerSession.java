@@ -34,7 +34,7 @@ public class ManagerSession implements ManagerSessionRemote {
     
     public Set<CarType> getCarTypesForCompany(String rentalCompany) {
         CarRentalCompany crc = RentalStore.getRentals().get(rentalCompany);
-        return (Set)crc.getAllTypes();
+        return new HashSet<CarType>(crc.getAllTypes());
     }
 
     @Override
