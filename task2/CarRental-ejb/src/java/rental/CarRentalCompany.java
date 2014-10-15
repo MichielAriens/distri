@@ -130,12 +130,14 @@ public class CarRentalCompany {
 		
 		Reservation res = new Reservation(quote, car.getId());
 		car.addReservation(res);
+                System.out.println(res.toString());
 		return res;
 	}
 
 	public void cancelReservation(Reservation res) {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
+                System.out.println("Cancelled: " + res.toString());
 	}
     
         //Get all reservations for a particular client in this company.
@@ -149,5 +151,18 @@ public class CarRentalCompany {
                 }
             }
             return retval;
+        }
+        
+        //Get all reservations for a particular car type in this company.
+        public Set<Reservation> getReservationsForCarType(String carType) {
+            Set<Reservation> reservations = new HashSet<Reservation>();
+            for(Car car : cars){
+                for(Reservation res : car.getReservations()){
+                    if(res.getCarType().equals(carType)){
+                        reservations.add(res);
+                    }
+                }
+            }
+            return reservations;
         }
 }
