@@ -26,9 +26,11 @@ public interface ICarRentalCompany extends Remote{
 	
 	public double calculateRentalPrice(double rentalPricePerDay, Date start, Date end) throws RemoteException;
 	
-	public Reservation confirmQuote(Quote quote) throws ReservationException, RemoteException;
+	public List<Reservation> confirmQuotes(List<Quote> quote) throws ReservationException, RemoteException;
 	
-	public void cancelReservation(Reservation res) throws ReservationException, RemoteException;
+	//public void cancelReservation(Reservation res) throws ReservationException, RemoteException;
+	
+	public void cancelReservations(List<Reservation> res) throws RemoteException;
 	
 	public List<Reservation> getReservationsBy(String clientName) throws RemoteException;
 	

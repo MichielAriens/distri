@@ -40,10 +40,26 @@ public class RentalServer implements IRentalServer{
 	}
 
 	@Override
-	public List<Reservation> confirmQuotesForAll(Map<String, List<Quote>> quotes)
+	public synchronized List<Reservation> confirmQuotesForAll(Map<String, List<Quote>> quotes)
 			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, List<Reservation>> confirmed = new HashMap<>();
+		for(String key : quotes.keySet()){
+			try {
+				List<Reservation> currentBatch = companies.get(key).confirmQuotes(quotes.get(key));
+				confirmed.put(key, currentBatch);
+			} catch (ReservationException e) {
+				//The CRC takes care of the current batch so we need not worry about it. 
+				//We need to roll back all successful calls of confirmQuotes(...) however:
+				for(String key1 : confirmed.keySet()){
+					companies.get(key1).cancelReservations(confirmed.get(key1));
+				}
+			}
+		}
+		List<Reservation> retval = new ArrayList<>();
+		for(List<Reservation> part : confirmed.values()){
+			retval.addAll(part);
+		}
+		return retval;
 	}
 }
 

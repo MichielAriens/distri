@@ -1,6 +1,7 @@
 package rental;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -129,9 +130,10 @@ public class CarRentalCompany implements ICarRentalCompany{
 	
 	/**
 	 * TODO: Add confirmQuotes(List<Quote>) as synchronized and hide confirmQuote(Quote) from public 
+	 * @throws RemoteException 
 	 * 
 	 */
-	public synchronized Reservation confirmQuote(Quote quote) throws ReservationException, RemoteException {
+	private synchronized Reservation confirmQuote(Quote quote) throws ReservationException, RemoteException {
 		logger.log(Level.INFO, "<{0}> Reservation of {1}", new Object[]{name, quote.toString()});
 		List<Car> availableCars = getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate());
 		if(availableCars.isEmpty())
@@ -144,11 +146,33 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return res;
 	}
 
-	public void cancelReservation(Reservation res) throws ReservationException, RemoteException {
+	public synchronized List<Reservation> confirmQuotes(List<Quote> quotes) throws RemoteException, ReservationException {
+		List<Reservation> confirmed = new ArrayList<>();
+		for(Quote quote: quotes){
+			try{
+				confirmed.add(confirmQuote(quote));
+			}catch (ReservationException | RemoteException e){
+				for(Reservation res : confirmed){
+					cancelReservation(res);
+				}
+			}
+		}
+		return confirmed;
+	}
+
+	private void cancelReservation(Reservation res) throws RemoteException {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
 	}  
 	
+
+	@Override
+	public void cancelReservations(List<Reservation> reservations)
+			throws RemoteException {
+		for(Reservation res : reservations){
+			cancelReservation(res);
+		}
+	}
 
 	public List<Reservation> getReservationsBy(String clientName) throws RemoteException{
 		List<Reservation> requestedReservations = new LinkedList<Reservation>();
