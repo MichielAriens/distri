@@ -1,6 +1,5 @@
 package rental;
 
-import java.rmi.Remote;
 
 public class Session implements ISession{
 	
@@ -10,7 +9,7 @@ public class Session implements ISession{
 		this.server = server;
 	}
 	
-	private IRentalServer getServer(){
+	public IRentalServer getServer(){
 		return server;
 	}
 
