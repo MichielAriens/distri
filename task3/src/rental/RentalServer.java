@@ -1,5 +1,6 @@
 package rental;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class RentalServer implements IRentalServer{
 	
 	public RentalServer(){
 		this.sessionServer = new SessionServer(this);
+		
 	}
 	
 	public ICarRentalSession getNewCarRentalSession(){
@@ -61,9 +63,18 @@ public class RentalServer implements IRentalServer{
 		}
 		return retval;
 	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public ICarRentalCompany addCarRentalCompany(ICarRentalCompany crc)
+			throws RemoteException {
+		
+	}
 }
 
-class SessionServer {
+class SessionServer implements Serializable{
 	private List<Session> activeSessions;
 	private RentalServer parent;
 	
