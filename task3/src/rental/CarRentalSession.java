@@ -47,14 +47,14 @@ public class CarRentalSession extends Session{
 	}
 	
 
-	public CarType getCheapestCarType(Date start, Date end) throws RemoteException {
+	public String getCheapestCarType(Date start, Date end) throws RemoteException {
 		CarType ct = null;
 		for(CarType carType: getAvailableCarTypes(start,end)){
 			if(!(ct == null) && (carType.getRentalPricePerDay() < ct.getRentalPricePerDay())){
 				ct = carType;
 			}
 		}
-		return ct;
+		return ct.getName();
 	}
 
 
