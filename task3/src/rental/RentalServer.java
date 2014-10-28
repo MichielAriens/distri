@@ -92,5 +92,9 @@ public class RentalServer implements IRentalServer{
 		System.out.println("Added new car rental company: " + crc.getName());
 	}
 
+	@Override
+	public void removeCarRentalCompany(String company) throws RemoteException{
+		companies.remove(getCarRentalCompany(company));
+	}
 	
 }

@@ -15,5 +15,6 @@ public interface IRentalServer extends Remote{
 	public List<Reservation> confirmQuotesForAll(List<Quote> quotes) throws RemoteException, ReservationException;
 	
 	public void addCarRentalCompany(ICarRentalCompany crc) throws RemoteException; 
-	
+
+	public void removeCarRentalCompany(String company) throws RemoteException;
 }

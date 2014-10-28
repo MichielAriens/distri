@@ -1,17 +1,12 @@
 package rental;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ManagerSession extends Session {
-	
-	private IRentalServer server;
 
 	public ManagerSession(IRentalServer server) {
 		super(server);
@@ -25,8 +20,16 @@ public class ManagerSession extends Session {
 		getServer().addCarRentalCompany(stub);
 	}
 	
+	public void unregisterCarRentalCompany(String name) throws RemoteException{
+		getServer().removeCarRentalCompany(name);
+	}
+	
 	public List<ICarRentalCompany> getAllCarRentalCompanies() throws RemoteException{
 		return getServer().getAllCarRentalCompanies();
+	}
+	
+	public List<CarType> getAllCarTypes(String company) throws RemoteException{
+		return (List<CarType>) getServer().getCarRentalCompany(company).getAllCarTypes();
 	}
 	
 	public int getNumberOfReservationsForCarType(String company, String carType) throws RemoteException{
