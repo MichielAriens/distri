@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class RentalServer implements IRentalServer{
 	private SessionServer sessionServer;
-	private Map<String, CarRentalCompany> companies = new HashMap<>();
+	private Map<String, ICarRentalCompany> companies = new HashMap<>();
 	
 	public RentalServer(){
 		this.sessionServer = new SessionServer(this);
@@ -68,9 +68,9 @@ public class RentalServer implements IRentalServer{
 	 * 
 	 */
 	@Override
-	public ICarRentalCompany addCarRentalCompany(ICarRentalCompany crc)
+	public void addCarRentalCompany(ICarRentalCompany crc)
 			throws RemoteException {
-		
+		companies.put(crc.getName(),crc);
 	}
 }
 
