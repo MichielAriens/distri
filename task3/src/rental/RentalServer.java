@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Central point of contact for the client.
@@ -96,6 +98,28 @@ public class RentalServer implements IRentalServer{
 			throws RemoteException {
 		companies.put(crc.getName(),crc);
 	}
+
+	@Override
+	public CarType getCheapestCarType() throws RemoteException{
+		CarType ct = null;
+		for(CarType carType: getAllCarTypes()){
+			if(!(ct == null) && (carType.getRentalPricePerDay() < ct.getRentalPricePerDay())){
+				ct = carType;
+			}
+		}
+		return ct;
+	}
+
+	@Override
+	public Set<CarType> getAllCarTypes() throws RemoteException {
+		Set<CarType> carTypes = new HashSet<CarType>();
+		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
+			carTypes.addAll(crc.getAllCarTypes());
+		}
+		return carTypes;
+	}
+	
+	
 }
 
 class SessionServer implements Serializable{

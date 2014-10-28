@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IRentalServer extends Remote{
 	
@@ -19,5 +20,7 @@ public interface IRentalServer extends Remote{
 	
 	public void addCarRentalCompany(ICarRentalCompany crc) throws RemoteException; 
 	
-
+	public CarType getCheapestCarType() throws RemoteException;
+	
+	public Set<CarType> getAllCarTypes() throws RemoteException;
 }

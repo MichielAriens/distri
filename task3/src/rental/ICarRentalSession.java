@@ -10,7 +10,11 @@ public interface ICarRentalSession extends ISession{
 	
 	public Quote createQuote(ReservationConstraints cons, String company) throws RemoteException, ReservationException;
 	
+	public List<Quote> getCurrentQuotes();
+	
 	public List<Reservation> confirmQuotes() throws RemoteException;
+	
+	public CarType getCheapestCarType();
 
 	public void setClientName(String client);
 	

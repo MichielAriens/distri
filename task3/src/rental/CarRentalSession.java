@@ -26,10 +26,22 @@ public class CarRentalSession extends Session implements ICarRentalSession{
 		String client = getClientName();
 		return getServer().getCarRentalCompany(company).createQuote(cons, client);
 	}
+	
+	@Override
+	public List<Quote> getCurrentQuotes() {
+		return quotes;
+	}
 
 	@Override
 	public List<Reservation> confirmQuotes() throws RemoteException {
 		return getServer().confirmQuotesForAll(quotes);
+	}
+	
+	@Override
+	public CarType getCheapestCarType() {
+		return getServer().getCheapestCarType();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -41,5 +53,9 @@ public class CarRentalSession extends Session implements ICarRentalSession{
 	public String getClientName() {
 		return client;
 	}
+
+	
+
+	
 
 }
