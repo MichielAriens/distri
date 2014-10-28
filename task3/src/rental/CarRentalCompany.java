@@ -199,4 +199,46 @@ public class CarRentalCompany implements ICarRentalCompany{
 		}
 		return numberOfRes;
 	}
+	
+	public List<Reservation> getAllReservations(){
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		for(Car car: cars){
+			reservations.addAll(car.getReservations());
+		}
+		return reservations;
+	}
+	
+	public Set<String> getAllCustomers(){
+		List<Reservation> reservations = getAllReservations();
+		Set<String> customers = new HashSet<String>();
+		for(Reservation reservation: reservations){
+			customers.add(reservation.getCarRenter());
+		}
+		return customers;
+	}
+	
+	public String getBestCustomer() throws RemoteException{
+		String best = "";
+		int res = 0;
+		for(String cust: getAllCustomers()){
+			if(getReservationsBy(cust).size()>res){
+				res = getReservationsBy(cust).size;
+				best = cust;
+			}
+		}
+		return best;
+	}
+	
+	public CarType getMostPopularCartype(){
+		CarType best = null;
+		int nbOfRes = 0;
+		for(CarType carType: getAllCarTypes()){
+			if(!(best == null) && 
+					(getNumberOfReservationsForCarType(carType)
+							>getNumberOfReservationsForCarType(best))){
+				best = carType;
+			}
+		}
+		return best;
+	}
 }

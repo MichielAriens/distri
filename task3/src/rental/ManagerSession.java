@@ -22,4 +22,24 @@ public class ManagerSession extends Session {
 		getServer().addCarRentalCompany(stub);
 	}
 	
+	public List<CarRentalCompany> getAllCarRentalCompanies() throws RemoteException{
+		return getServer().getAllCarRentalCompanies();
+	}
+	
+	public int getNumberOfReservationsForCarType(String company, String carType) throws RemoteException{
+		return getServer().getCarRentalCompany(company).getNumberOfReservationsForCarType(carType);
+	}
+	
+	public Set<String> getBestClients(){
+		return null;
+	}
+	
+	public int getNumberOfReservationsBy(String client) throws RemoteException{
+		int res = 0;
+		for(CarRentalCompany crc: getAllCarRentalCompanies()){
+			res = res + crc.getReservationsBy(client).size();
+		}
+		return res;
+	}
+	
 }
