@@ -15,6 +15,4 @@ public class ManagerSession extends Session implements IManagerSession{
 		getServer().addCarRentalCompany(new CarRentalCompany(name, cars));
 	}
 	
-	
-
 }
