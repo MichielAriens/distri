@@ -9,28 +9,26 @@ public class CarRentalSession extends Session implements ICarRentalSession{
 	
 	private List<Quote> quotes = new ArrayList<>();
 
-	public CarRentalSession(IRentalServer server) {
-		super(server);
+	public CarRentalSession(IRentalServer server, String client) {
+		super(server, client);
 	}
 
 	@Override
 	public List<CarType> getAvailablaCarTypes(Date start, Date end,
 			String company) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<CarType>(getServer().getCarRentalCompany(company).getAvailableCarTypes(start, end));
 	}
 
 	@Override
 	public Quote createQuote(ReservationConstraints cons, String company)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+			throws RemoteException, ReservationException {
+		String client = getClient();
+		return getServer().getCarRentalCompany(company).createQuote(cons, client);
 	}
 
 	@Override
 	public List<Reservation> confirmQuotes() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		return getServer().confirmQuotesForAll(quotes);
 	}
 
 }

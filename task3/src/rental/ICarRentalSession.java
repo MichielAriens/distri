@@ -8,7 +8,7 @@ public interface ICarRentalSession extends ISession{
 	
 	public List<CarType> getAvailablaCarTypes(Date start, Date end, String company) throws RemoteException;
 	
-	public Quote createQuote(ReservationConstraints cons, String company) throws RemoteException;
+	public Quote createQuote(ReservationConstraints cons, String company) throws RemoteException, ReservationException;
 	
 	public List<Reservation> confirmQuotes() throws RemoteException;
 

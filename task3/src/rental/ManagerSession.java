@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ManagerSession extends Session implements IManagerSession{
 
-	public ManagerSession(RentalServer server) {
-		super(server);
+	public ManagerSession(RentalServer server, String client) {
+		super(server,client);
 	}
 
 	@Override
