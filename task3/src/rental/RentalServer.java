@@ -91,25 +91,5 @@ public class RentalServer implements IRentalServer{
 		System.out.println("Added new car rental company: " + crc.getName());
 	}
 
-	@Override
-	public CarType getCheapestCarType() throws RemoteException{
-		CarType ct = null;
-		for(CarType carType: getAllCarTypes()){
-			if(!(ct == null) && (carType.getRentalPricePerDay() < ct.getRentalPricePerDay())){
-				ct = carType;
-			}
-		}
-		return ct;
-	}
-
-	@Override
-	public Set<CarType> getAllCarTypes() throws RemoteException {
-		Set<CarType> carTypes = new HashSet<CarType>();
-		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
-			carTypes.addAll(crc.getAllCarTypes());
-		}
-		return carTypes;
-	}
-	
 	
 }

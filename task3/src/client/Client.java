@@ -73,7 +73,7 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	@Override
 	protected void checkForAvailableCarTypes(CarRentalSession session,
 			Date start, Date end) throws Exception {
-		System.out.println(session.getAvailablaCarTypes(start, end));
+		System.out.println(session.getAvailableCarTypes(start, end));
 		
 	}
 

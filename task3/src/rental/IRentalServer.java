@@ -16,7 +16,4 @@ public interface IRentalServer extends Remote{
 	
 	public void addCarRentalCompany(ICarRentalCompany crc) throws RemoteException; 
 	
-	public CarType getCheapestCarType() throws RemoteException;
-	
-	public Set<CarType> getAllCarTypes() throws RemoteException;
 }
