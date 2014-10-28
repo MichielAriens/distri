@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface IManagerSession extends ISession{
 	
-	public ICarRentalCompany registerNewCarRentalCompany(String name, List<Car> cars) throws RemoteException;
+	public void registerNewCarRentalCompany(String name, List<Car> cars) throws RemoteException;
 
 }

@@ -5,27 +5,34 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import rental.Car;
-import rental.CarRentalCompany;
 import rental.CarType;
-import rental.ICarRentalCompany;
-import rental.ICarRentalSession;
 import rental.IManagerSession;
-import rental.IRentalServer;
 import rental.ReservationException;
 
 /**
  * A company node contains the code to add a new company to the cluster.
- * @author michiel
+ * @author Michiel, Julie
  *
  */
 public class CompanyNode extends BasicClient {
+	
+	public static void main(String[] args){
+		try {
+			CompanyNode node = new CompanyNode("hertz", "hertz.csv");
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public CompanyNode(String name, String companyConfigFilePath) throws RemoteException, NotBoundException {
 		super();
