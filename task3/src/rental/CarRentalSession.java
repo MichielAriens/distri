@@ -33,7 +33,9 @@ public class CarRentalSession extends Session{
 	public Quote createQuote(ReservationConstraints cons, String company)
 			throws RemoteException, ReservationException {
 		String client = getClientName();
-		return getServer().getCarRentalCompany(company).createQuote(cons, client);
+		Quote quote = getServer().getCarRentalCompany(company).createQuote(cons, client);
+		quotes.add(quote);
+		return quote;
 	}
 	
 
@@ -42,7 +44,10 @@ public class CarRentalSession extends Session{
 	}
 
 
-	public List<Reservation> confirmQuotes() throws RemoteException {
+	public List<Reservation> confirmQuotes() throws RemoteException, ReservationException{
+		if(client == "Will"){
+			System.out.println("bla");
+		}
 		return getServer().confirmQuotesForAll(quotes);
 	}
 	
@@ -50,7 +55,10 @@ public class CarRentalSession extends Session{
 	public String getCheapestCarType(Date start, Date end) throws RemoteException {
 		CarType ct = null;
 		for(CarType carType: getAvailableCarTypes(start,end)){
-			if(!(ct == null) && (carType.getRentalPricePerDay() < ct.getRentalPricePerDay())){
+			if(ct == null){
+				ct = carType;
+			}
+			if(carType.getRentalPricePerDay() < ct.getRentalPricePerDay()){
 				ct = carType;
 			}
 		}

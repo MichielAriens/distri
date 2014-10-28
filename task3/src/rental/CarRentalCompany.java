@@ -155,6 +155,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 				for(Reservation res : confirmed){
 					cancelReservation(res);
 				}
+				throw new ReservationException(e.getMessage());
 			}
 		}
 		return confirmed;
@@ -235,11 +236,12 @@ public class CarRentalCompany implements ICarRentalCompany{
 	
 	public CarType getMostPopularCartype() throws RemoteException{
 		CarType best = null;
-		int nbOfRes = 0;
 		for(CarType carType: getAllCarTypes()){
-			if(!(best == null) && 
-					(getNumberOfReservationsForCarType(carType.getName())
-							>getNumberOfReservationsForCarType(best.getName()))){
+			if(best == null){
+				best = carType;
+			}
+			if(getNumberOfReservationsForCarType(carType.getName())
+							> getNumberOfReservationsForCarType(best.getName())){
 				best = carType;
 			}
 		}

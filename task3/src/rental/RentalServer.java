@@ -37,7 +37,7 @@ public class RentalServer implements IRentalServer{
 
 	@Override
 	public synchronized List<Reservation> confirmQuotesForAll(List<Quote> quotes)
-			throws RemoteException {
+			throws RemoteException, ReservationException {
 		//sort and map the quotes by company 
 		Map<String, List<Quote>> mapped = mapOnCompany(quotes);		
 		Map<String, List<Reservation>> confirmed = new HashMap<>();
@@ -51,6 +51,7 @@ public class RentalServer implements IRentalServer{
 				for(String key1 : confirmed.keySet()){
 					companies.get(key1).cancelReservations(confirmed.get(key1));
 				}
+				throw new ReservationException(e.getMessage());
 			}
 		}
 		List<Reservation> retval = new ArrayList<>();

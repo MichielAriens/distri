@@ -38,14 +38,16 @@ public class ManagerSession extends Session {
 		int res = 0;
 		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
 			List<String> bestCustomers = crc.getBestCustomers();
-			int numb = getNumberOfReservationsBy(bestCustomers.get(0));
-			if(numb == res){
-				best.addAll(bestCustomers);
-			}
-			if(numb>res){
-				best.clear();
-				best.addAll(bestCustomers);
-				res = numb;
+			if(!bestCustomers.isEmpty()){		
+				int numb = getNumberOfReservationsBy(bestCustomers.get(0));
+				if(numb == res){
+					best.addAll(bestCustomers);
+				}
+				if(numb>res){
+					best.clear();
+					best.addAll(bestCustomers);
+					res = numb;
+				}
 			}
 		}
 		
