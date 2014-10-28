@@ -17,27 +17,10 @@ import java.util.Set;
  *
  */
 public class RentalServer implements IRentalServer{
-	private SessionServer sessionServer;
 	private Map<String, ICarRentalCompany> companies = new HashMap<>();
 	
 	public RentalServer(){
-		this.sessionServer = new SessionServer(this);
 		
-	}
-	
-	@SuppressWarnings("deprecation")
-	public ICarRentalSession getNewCarRentalSession() throws RemoteException{
-		ICarRentalSession session = this.sessionServer.getNewCarRentalSession();
-		ICarRentalSession stub = (ICarRentalSession) UnicastRemoteObject.exportObject(session);
-		
-		return stub;
-	}
-	
-	@SuppressWarnings("deprecation")
-	public IManagerSession getNewManagerSession() throws RemoteException{
-		IManagerSession session = this.sessionServer.getNewManagerSession();
-		IManagerSession stub = (IManagerSession) UnicastRemoteObject.exportObject(session);
-		return stub;
 	}
 
 	@Override
@@ -128,26 +111,4 @@ public class RentalServer implements IRentalServer{
 	}
 	
 	
-}
-
-class SessionServer implements Serializable{
-	private List<ISession> activeSessions;
-	private RentalServer parent;
-	
-	public SessionServer(RentalServer parent){
-		this.activeSessions = new ArrayList<>();
-		this.parent = parent;
-	}
-	
-	protected ICarRentalSession getNewCarRentalSession(){
-		CarRentalSession retval = new CarRentalSession(this.parent);
-		activeSessions.add(retval);
-		return retval;
-	}
-	
-	protected IManagerSession getNewManagerSession(){
-		ManagerSession retval = new ManagerSession(this.parent);
-		activeSessions.add(retval);
-		return retval;
-	}
 }

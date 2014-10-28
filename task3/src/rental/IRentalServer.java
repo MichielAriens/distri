@@ -8,10 +8,6 @@ import java.util.Set;
 
 public interface IRentalServer extends Remote{
 	
-	public ICarRentalSession getNewCarRentalSession() throws RemoteException;
-	
-	public IManagerSession getNewManagerSession() throws RemoteException;
-	
 	public ICarRentalCompany getCarRentalCompany(String name) throws RemoteException;
 	
 	public List<ICarRentalCompany> getAllCarRentalCompanies() throws RemoteException;

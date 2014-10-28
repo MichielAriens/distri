@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 
 import rental.Car;
 import rental.CarType;
-import rental.IManagerSession;
+import rental.ManagerSession;
 import rental.ReservationException;
 
 /**
@@ -37,7 +37,7 @@ public class CompanyNode extends BasicClient {
 	
 	public CompanyNode(String name, String companyConfigFilePath) throws RemoteException, NotBoundException {
 		super();
-		IManagerSession manSession = server.getNewManagerSession();
+		ManagerSession manSession = new ManagerSession(server);
 		try {
 			manSession.registerNewCarRentalCompany(name, loadData(companyConfigFilePath));
 		} catch (NumberFormatException e) {
