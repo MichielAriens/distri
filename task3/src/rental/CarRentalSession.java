@@ -15,8 +15,7 @@ public class CarRentalSession extends Session{
 	}
 
 
-	public List<CarType> getAvailablaCarTypes(Date start, Date end,
-			String company) throws RemoteException {
+	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
 		return new ArrayList<CarType>(getServer().getCarRentalCompany(company).getAvailableCarTypes(start, end));
 	}
 
@@ -37,8 +36,14 @@ public class CarRentalSession extends Session{
 	}
 	
 
-	public CarType getCheapestCarType() throws RemoteException {
-		return getServer().getCheapestCarType();
+	public CarType getCheapestCarType(Date start, Date end) throws RemoteException {
+		CarType ct = null;
+		for(CarType carType: getAvailableCarTypes(start,end)){
+			if(!(ct == null) && (carType.getRentalPricePerDay() < ct.getRentalPricePerDay())){
+				ct = carType;
+			}
+		}
+		return ct;
 	}
 
 

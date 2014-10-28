@@ -83,41 +83,36 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	@Override
 	protected void addQuoteToSession(CarRentalSession session, Date start,
 			Date end, String carType, String carRentalName) throws Exception {
-		// TODO Auto-generated method stub
-		
+		ReservationConstraints cons = new ReservationConstraints(start, end, carType);
+		session.createQuote(cons, carRentalName);
 	}
 
 	@Override
 	protected List<Reservation> confirmQuotes(CarRentalSession session)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return session.confirmQuotes();
 	}
 
 	@Override
 	protected int getNumberOfReservationsBy(ManagerSession ms, String clientName)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return ms.getNumberOfReservationsBy(clientName);
 	}
 
 	@Override
 	protected Set<String> getBestClients(ManagerSession ms) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return ms.getBestClients();
 	}
 
 	@Override
 	protected int getNumberOfReservationsForCarType(ManagerSession ms,
 			String carRentalCompanyName, String carType) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return ms.getNumberOfReservationsForCarType(carRentalCompanyName, carType);
 	}
 
 	@Override
 	protected CarType getMostPopularCarTypeIn(ManagerSession ms,
 			String carRentalCompanyName) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return ms.getMostPopularCarTypeIn(carRentalCompanyName);
 	}
 }
