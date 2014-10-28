@@ -187,7 +187,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return requestedReservations;
 	}
 	
-	public int getNumberOfReservationsForCarType(String carType) throws RemoteException{
+	public int getNumberOfReservationsForCarType(String carType){
 		int numberOfRes = 0;
 		for (Car car : cars) {
 			List<Reservation> reservations = car.getReservations();
@@ -198,5 +198,51 @@ public class CarRentalCompany implements ICarRentalCompany{
 			}
 		}
 		return numberOfRes;
+	}
+	
+	private List<Reservation> getAllReservations(){
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		for(Car car: cars){
+			reservations.addAll(car.getReservations());
+		}
+		return reservations;
+	}
+	
+	private Set<String> getAllCustomers(){
+		List<Reservation> reservations = getAllReservations();
+		Set<String> customers = new HashSet<String>();
+		for(Reservation reservation: reservations){
+			customers.add(reservation.getCarRenter());
+		}
+		return customers;
+	}
+	
+	public List<String> getBestCustomers() throws RemoteException{
+		List<String> best = new ArrayList<String>();
+		int res = 0;
+		for(String cust: getAllCustomers()){
+			if(getReservationsBy(cust).size() == res){
+				best.add(cust);
+			}
+			if(getReservationsBy(cust).size()>res){
+				res = getReservationsBy(cust).size();
+				best.clear();
+				best.add(cust);
+			}
+		}
+		return best;
+	}
+	
+	public CarType getMostPopularCartype() throws RemoteException{
+		CarType best = null;
+		int nbOfRes = 0;
+		for(CarType carType: getAllCarTypes()){
+			if(!(best == null) && 
+					(getNumberOfReservationsForCarType(carType.getName())
+							>getNumberOfReservationsForCarType(best.getName()))){
+				best = carType;
+			}
+		}
+		return best;
 	}
 }
