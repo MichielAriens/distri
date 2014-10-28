@@ -3,7 +3,9 @@ package rental;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CarRentalSession extends Session{
 	
@@ -14,10 +16,19 @@ public class CarRentalSession extends Session{
 		super(server);
 	}
 
-
-	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException {
+	public List<CarType> getAvailableCarTypes(Date start, Date end,
+			String company) throws RemoteException {
 		return new ArrayList<CarType>(getServer().getCarRentalCompany(company).getAvailableCarTypes(start, end));
 	}
+
+	public Set<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException{
+		Set<CarType> retval = new HashSet<>();
+		for(ICarRentalCompany crc : getServer().getAllCarRentalCompanies()){
+			retval.addAll(crc.getAvailableCarTypes(start, end));
+		}
+		return retval;
+	}
+
 
 	public Quote createQuote(ReservationConstraints cons, String company)
 			throws RemoteException, ReservationException {
