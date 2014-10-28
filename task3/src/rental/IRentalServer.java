@@ -15,7 +15,7 @@ public interface IRentalServer extends Remote{
 	
 	public List<ICarRentalCompany> getAllCarRentalCompanies() throws RemoteException;
 	
-	public List<Reservation> confirmQuotesForAll(Map<String, List<Quote>> quotes) throws RemoteException;
+	public List<Reservation> confirmQuotesForAll(List<Quote> quotes) throws RemoteException;
 	
 	public void addCarRentalCompany(ICarRentalCompany crc) throws RemoteException; 
 	
