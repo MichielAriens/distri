@@ -25,7 +25,7 @@ public class ManagerSession extends Session {
 		getServer().addCarRentalCompany(stub);
 	}
 	
-	public List<CarRentalCompany> getAllCarRentalCompanies() throws RemoteException{
+	public List<ICarRentalCompany> getAllCarRentalCompanies() throws RemoteException{
 		return getServer().getAllCarRentalCompanies();
 	}
 	
@@ -36,7 +36,7 @@ public class ManagerSession extends Session {
 	public Set<String> getBestClients() throws RemoteException{
 		Set<String> best = new HashSet<String>();
 		int res = 0;
-		for(CarRentalCompany crc: getAllCarRentalCompanies()){
+		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
 			List<String> bestCustomers = crc.getBestCustomers();
 			int numb = getNumberOfReservationsBy(bestCustomers.get(0));
 			if(numb == res){
@@ -54,7 +54,7 @@ public class ManagerSession extends Session {
 	
 	public int getNumberOfReservationsBy(String client) throws RemoteException{
 		int res = 0;
-		for(CarRentalCompany crc: getAllCarRentalCompanies()){
+		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
 			res = res + crc.getReservationsBy(client).size();
 		}
 		return res;
