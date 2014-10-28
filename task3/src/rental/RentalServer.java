@@ -2,6 +2,7 @@ package rental;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,12 +23,19 @@ public class RentalServer implements IRentalServer{
 		
 	}
 	
-	public ICarRentalSession getNewCarRentalSession(){
-		return this.sessionServer.getNewCarRentalSession();
+	@SuppressWarnings("deprecation")
+	public ICarRentalSession getNewCarRentalSession() throws RemoteException{
+		ICarRentalSession session = this.sessionServer.getNewCarRentalSession();
+		ICarRentalSession stub = (ICarRentalSession) UnicastRemoteObject.exportObject(session);
+		
+		return stub;
 	}
 	
-	public IManagerSession getNewManagerSession(){
-		return this.sessionServer.getNewManagerSession();
+	@SuppressWarnings("deprecation")
+	public IManagerSession getNewManagerSession() throws RemoteException{
+		IManagerSession session = this.sessionServer.getNewManagerSession();
+		IManagerSession stub = (IManagerSession) UnicastRemoteObject.exportObject(session);
+		return stub;
 	}
 
 	@Override
@@ -99,7 +107,7 @@ public class RentalServer implements IRentalServer{
 }
 
 class SessionServer implements Serializable{
-	private List<Session> activeSessions;
+	private List<ISession> activeSessions;
 	private RentalServer parent;
 	
 	public SessionServer(RentalServer parent){
@@ -107,13 +115,13 @@ class SessionServer implements Serializable{
 		this.parent = parent;
 	}
 	
-	protected CarRentalSession getNewCarRentalSession(){
+	protected ICarRentalSession getNewCarRentalSession(){
 		CarRentalSession retval = new CarRentalSession(this.parent);
 		activeSessions.add(retval);
 		return retval;
 	}
 	
-	protected ManagerSession getNewManagerSession(){
+	protected IManagerSession getNewManagerSession(){
 		ManagerSession retval = new ManagerSession(this.parent);
 		activeSessions.add(retval);
 		return retval;
