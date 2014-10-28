@@ -42,4 +42,8 @@ public class ManagerSession extends Session {
 		return res;
 	}
 	
+	public CarType getMostPopularCarTypeIn(String company) throws RemoteException{
+		return getServer().getCarRentalCompany(company).getMostPopularCartype();
+	}
+	
 }
