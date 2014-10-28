@@ -1,6 +1,6 @@
 package rental;
 
-public class Session {
+public class Session{
 	
 	private IRentalServer server;
 	

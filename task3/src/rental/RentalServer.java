@@ -88,6 +88,7 @@ public class RentalServer implements IRentalServer{
 	public void addCarRentalCompany(ICarRentalCompany crc)
 			throws RemoteException {
 		companies.put(crc.getName(),crc);
+		System.out.println("Added new car rental company: " + crc.getName());
 	}
 
 	@Override

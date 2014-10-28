@@ -20,11 +20,11 @@ import rental.ReservationException;
  *
  */
 public class CompanyNode extends BasicClient {
-	
-	@SuppressWarnings("unused")
+
 	public static void main(String[] args){
 		try {
-			CompanyNode node = new CompanyNode("hertz", "hertz.csv");
+			new CompanyNode("hertz", "hertz.csv");
+			new CompanyNode("dockx", "dockx.csv");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
