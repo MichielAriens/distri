@@ -11,6 +11,7 @@ import java.util.Set;
 import rental.CarRentalSession;
 import rental.CarType;
 import rental.ICarRentalCompany;
+import rental.IRentalServer;
 import rental.ManagerSession;
 import rental.Quote;
 import rental.Reservation;
@@ -23,6 +24,7 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	
 	Registry registry;
 	ICarRentalCompany crc;
+	private IRentalServer server; 
 	
 	
 	/********
@@ -42,6 +44,7 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	public Client(String scriptFile, String carRentalCompanyName) {
 		super(scriptFile);
 		try {
+			this.server = (IRentalServer) registry.lookup("rentalServer");
 			this.registry = LocateRegistry.getRegistry("localhost", 1099);
 			this.crc = (ICarRentalCompany) registry.lookup(carRentalCompanyName);			
 		} catch (RemoteException e) {
@@ -56,20 +59,21 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	@Override
 	protected CarRentalSession getNewReservationSession(String name)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		CarRentalSession session = new CarRentalSession(server);
+		session.setClientName(name);
+		return session;
 	}
 
 	@Override
 	protected ManagerSession getNewManagerSession(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ManagerSession session = new ManagerSession(server);
+		return session;
 	}
 
 	@Override
 	protected void checkForAvailableCarTypes(CarRentalSession session,
 			Date start, Date end) throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println(session.getAvailablaCarTypes(start, end));
 		
 	}
 
