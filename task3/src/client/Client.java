@@ -14,7 +14,7 @@ import rental.Reservation;
 import rental.ReservationConstraints;
 import rental.ReservationException;
 
-public class Client extends AbstractScriptedSimpleTest {
+public class Client extends AbstractScriptedTripTest {
 	
 	public static String carRentalCompanyName = "Hertz";
 	
