@@ -12,4 +12,7 @@ public interface ICarRentalSession extends ISession{
 	
 	public List<Reservation> confirmQuotes() throws RemoteException;
 
+	public void setClientName(String client);
+	
+	public String getClientName();
 }

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ManagerSession extends Session implements IManagerSession{
 
-	public ManagerSession(RentalServer server, String client) {
-		super(server,client);
+	public ManagerSession(RentalServer server) {
+		super(server);
 	}
 
 	@Override
@@ -15,6 +15,4 @@ public class ManagerSession extends Session implements IManagerSession{
 		return getServer().addCarRentalCompany(new CarRentalCompany(name, cars));
 	}
 	
-	
-
 }

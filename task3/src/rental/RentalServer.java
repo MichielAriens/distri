@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Central point of contact for the client.
- * @author michiel
+ * @author michiel, julie
  *
  */
 public class RentalServer implements IRentalServer{
