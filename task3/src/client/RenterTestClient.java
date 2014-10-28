@@ -29,8 +29,8 @@ public class RenterTestClient extends BasicClient{
 	private void run() throws RemoteException, ReservationException {
 		CarRentalSession session = new CarRentalSession(server);
 		Date start = new Date(2014,1,1); Date end = new Date(2014,1,2);
-		List<CarType> typesA = session.getAvailablaCarTypes(start, end, "hertz");
-		List<CarType> typesB = session.getAvailablaCarTypes(start, end, "dockx");
+		List<CarType> typesA = session.getAvailableCarTypes(start, end, "hertz");
+		List<CarType> typesB = session.getAvailableCarTypes(start, end, "dockx");
 		System.out.println("HERTZ: " + typesA);
 		ReservationConstraints cons = new ReservationConstraints(start, end, "Premium");
 		session.createQuote(cons, "hertz");

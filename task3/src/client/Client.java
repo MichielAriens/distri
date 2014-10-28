@@ -23,7 +23,6 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	public static String carRentalCompanyName = "Hertz";
 	
 	Registry registry;
-	ICarRentalCompany crc;
 	private IRentalServer server; 
 	
 	
@@ -33,7 +32,7 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	
 	public static void main(String[] args) throws Exception {		
 		// An example reservation scenario on car rental company 'Hertz' would be...
-		Client client = new Client("simpleTrips", carRentalCompanyName);
+		Client client = new Client("trips", carRentalCompanyName);
 		client.run();
 	}
 	
@@ -44,9 +43,8 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	public Client(String scriptFile, String carRentalCompanyName) {
 		super(scriptFile);
 		try {
-			this.server = (IRentalServer) registry.lookup("rentalServer");
 			this.registry = LocateRegistry.getRegistry("localhost", 1099);
-			this.crc = (ICarRentalCompany) registry.lookup(carRentalCompanyName);			
+			this.server = (IRentalServer) registry.lookup("rentalServer");
 		} catch (RemoteException e) {
 			//e.printStackTrace();
 			throw new RuntimeException("Could not connect to registry!");
@@ -73,7 +71,7 @@ public class Client extends AbstractScriptedTripTest<CarRentalSession, ManagerSe
 	@Override
 	protected void checkForAvailableCarTypes(CarRentalSession session,
 			Date start, Date end) throws Exception {
-		System.out.println(session.getAvailablaCarTypes(start, end));
+		System.out.println(session.getAvailableCarTypes(start, end));
 		
 	}
 

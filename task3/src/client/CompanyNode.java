@@ -23,8 +23,8 @@ public class CompanyNode extends BasicClient {
 
 	public static void main(String[] args){
 		try {
-			new CompanyNode("hertz", "hertz.csv");
-			new CompanyNode("dockx", "dockx.csv");
+			new CompanyNode("Hertz", "hertz.csv");
+			new CompanyNode("Dockx", "dockx.csv");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
