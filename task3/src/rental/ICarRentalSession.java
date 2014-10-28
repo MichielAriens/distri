@@ -16,7 +16,7 @@ public interface ICarRentalSession extends ISession{
 	
 	public CarType getCheapestCarType();
 
-	public void setClientName(String client);
+	public void setClientName(String client) throws RemoteException;
 	
-	public String getClientName();
+	public String getClientName() throws RemoteException;
 }

@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CarRentalSession extends Session implements ICarRentalSession{
+public class CarRentalSession implements ICarRentalSession{
 	
 	private List<Quote> quotes = new ArrayList<>();
 	private String client;
+	private IRentalServer server;
 
 	public CarRentalSession(IRentalServer server) {
-		super(server);
+		this.server = server;
 	}
 
 	@Override
@@ -54,8 +55,9 @@ public class CarRentalSession extends Session implements ICarRentalSession{
 		return client;
 	}
 
-	
-
-	
+	@Override
+	public IRentalServer getServer() throws RemoteException {
+		return this.server;
+	}
 
 }

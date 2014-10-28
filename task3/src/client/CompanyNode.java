@@ -21,6 +21,7 @@ import rental.ReservationException;
  */
 public class CompanyNode extends BasicClient {
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args){
 		try {
 			CompanyNode node = new CompanyNode("hertz", "hertz.csv");
