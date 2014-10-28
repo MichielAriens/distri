@@ -217,13 +217,17 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return customers;
 	}
 	
-	public String getBestCustomer() throws RemoteException{
-		String best = "";
+	public List<String> getBestCustomers() throws RemoteException{
+		List<String> best = new ArrayList<String>();
 		int res = 0;
 		for(String cust: getAllCustomers()){
+			if(getReservationsBy(cust).size() == res){
+				best.add(cust);
+			}
 			if(getReservationsBy(cust).size()>res){
 				res = getReservationsBy(cust).size();
-				best = cust;
+				best.clear();
+				best.add(cust);
 			}
 		}
 		return best;

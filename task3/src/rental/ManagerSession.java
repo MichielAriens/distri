@@ -4,7 +4,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ManagerSession extends Session {
 	
@@ -30,8 +33,23 @@ public class ManagerSession extends Session {
 		return getServer().getCarRentalCompany(company).getNumberOfReservationsForCarType(carType);
 	}
 	
-	public Set<String> getBestClients(){
-		return null;
+	public Set<String> getBestClients() throws RemoteException{
+		Set<String> best = new HashSet<String>();
+		int res = 0;
+		for(CarRentalCompany crc: getAllCarRentalCompanies()){
+			List<String> bestCustomers = crc.getBestCustomers();
+			int numb = getNumberOfReservationsBy(bestCustomers.get(0));
+			if(numb == res){
+				best.addAll(bestCustomers);
+			}
+			if(numb>res){
+				best.clear();
+				best.addAll(bestCustomers);
+				res = numb;
+			}
+		}
+		
+		return best;
 	}
 	
 	public int getNumberOfReservationsBy(String client) throws RemoteException{
