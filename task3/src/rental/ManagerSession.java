@@ -12,19 +12,38 @@ public class ManagerSession extends Session {
 	public ManagerSession(IRentalServer server) {
 		super(server);
 	}
-
+	
+	/**
+	 * Register a new CarRentalCompany with the RentalServer.
+	 * 
+	 * @param name
+	 * 			name of the CarRentalCompany to be registered
+	 * @param cars
+	 * 			a list of cars contained in the CarRentalCompany
+	 * @throws RemoteException
+	 */
 	public void registerNewCarRentalCompany(String name,
 			List<Car> cars) throws RemoteException {
 		ICarRentalCompany crc = new CarRentalCompany(name, cars);
-		@SuppressWarnings("deprecation")
 		ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
 		getServer().addCarRentalCompany(stub);
 	}
 	
+	/**
+	 * Unregisters a certain CarRentalCompany from the server.
+	 * 
+	 * @param name
+	 * @throws RemoteException
+	 */
 	public void unregisterCarRentalCompany(String name) throws RemoteException{
 		getServer().removeCarRentalCompany(name);
 	}
 	
+	/**
+	 * 
+	 * @return all registered CarRentalCompanies
+	 * @throws RemoteException
+	 */
 	public List<String> getAllCarRentalCompanies() throws RemoteException{
 		List<String> retval = new LinkedList<>();
 		for (ICarRentalCompany crc : getServer().getAllCarRentalCompanies()){
@@ -33,14 +52,35 @@ public class ManagerSession extends Session {
 		return retval;
 	}
 	
+	/**
+	 * 
+	 * @param company
+	 * @return all CarTypes provided by a given CarRentalCompany
+	 * @throws RemoteException
+	 */
 	public List<CarType> getAllCarTypes(String company) throws RemoteException{
 		return (List<CarType>) getServer().getCarRentalCompany(company).getAllCarTypes();
 	}
 	
+	/**
+	 * 
+	 * @param company
+	 * @param carType
+	 * @return the number of reservations made for 
+	 * 			a given CarType at a given CarRentalCompany
+	 * @throws RemoteException
+	 */
 	public int getNumberOfReservationsForCarType(String company, String carType) throws RemoteException{
 		return getServer().getCarRentalCompany(company).getNumberOfReservationsForCarType(carType);
 	}
 	
+	/**
+	 * Returns the best client(s)
+	 * 
+	 * @return a list of names of the client(s) with the
+	 * 			most reservations over all CarRentalCompanies
+	 * @throws RemoteException
+	 */
 	public Set<String> getBestClients() throws RemoteException{
 		Set<String> best = new HashSet<String>();
 		int res = 0;
