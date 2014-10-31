@@ -3,6 +3,7 @@ package rental;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +25,12 @@ public class ManagerSession extends Session {
 		getServer().removeCarRentalCompany(name);
 	}
 	
-	public List<ICarRentalCompany> getAllCarRentalCompanies() throws RemoteException{
-		return getServer().getAllCarRentalCompanies();
+	public List<String> getAllCarRentalCompanies() throws RemoteException{
+		List<String> retval = new LinkedList<>();
+		for (ICarRentalCompany crc : getServer().getAllCarRentalCompanies()){
+			retval.add(crc.getName());
+		}
+		return retval;
 	}
 	
 	public List<CarType> getAllCarTypes(String company) throws RemoteException{
@@ -39,7 +44,7 @@ public class ManagerSession extends Session {
 	public Set<String> getBestClients() throws RemoteException{
 		Set<String> best = new HashSet<String>();
 		int res = 0;
-		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
+		for(ICarRentalCompany crc: getServer().getAllCarRentalCompanies()){
 			List<String> bestCustomers = crc.getBestCustomers();
 			if(!bestCustomers.isEmpty()){		
 				int numb = getNumberOfReservationsBy(bestCustomers.get(0));
@@ -57,14 +62,26 @@ public class ManagerSession extends Session {
 		return best;
 	}
 	
+	/**
+	 * Gets the total number of reservations (system-wide) by a particular client
+	 * @param client
+	 * @return
+	 * @throws RemoteException
+	 */
 	public int getNumberOfReservationsBy(String client) throws RemoteException{
 		int res = 0;
-		for(ICarRentalCompany crc: getAllCarRentalCompanies()){
+		for(ICarRentalCompany crc: getServer().getAllCarRentalCompanies()){
 			res = res + crc.getReservationsBy(client).size();
 		}
 		return res;
 	}
 	
+	/**
+	 * Gets the most popular car type in a company
+	 * @param company		Company identifier
+	 * @return				CarType in company identified by company with most reservations in that company
+	 * @throws RemoteException
+	 */
 	public CarType getMostPopularCarTypeIn(String company) throws RemoteException{
 		return getServer().getCarRentalCompany(company).getMostPopularCartype();
 	}

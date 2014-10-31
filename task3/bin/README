@@ -1,0 +1,20 @@
+There are three programs you may need to run. 
+They can be run on different nodes after correct setup. 
+Client connections can be configured in BasicClient.
+Server setup can be configured in StartServer
+
+Start the central server: 
+	-start rmiregistry
+	-run rental.StartServer
+	NOTE: This server has no companies registered yet.
+	
+Start a company node
+	-Use the class client.CompanyNode (CompanyNode(String name, String companyConfigFilePath))
+	-main in CompanyNode starts dockx and hertz
+	
+Start or write a client:
+	-Client implements AbstractScriptedTripTest
+	-BasicClient is an abstract class you can extend to create clients. It provides a connection to the server.
+	-RenterTestClient provides a simple test implementation of BasicClient 
+
+ 

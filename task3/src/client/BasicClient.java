@@ -7,6 +7,11 @@ import java.rmi.registry.Registry;
 
 import rental.IRentalServer;
 
+/**
+ * Provides implementing classes with a RentalServer and a registry.
+ * @author michiel
+ *
+ */
 public class BasicClient {
 
 	protected Registry registry;

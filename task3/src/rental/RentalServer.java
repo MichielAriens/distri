@@ -13,7 +13,6 @@ import java.util.Set;
 
 /**
  * Central point of contact for the client.
- * @author michiel, julie
  *
  */
 public class RentalServer implements IRentalServer{

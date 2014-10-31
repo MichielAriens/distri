@@ -82,7 +82,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 	 * @throws RemoteException *
 	 *********/
 	
-	public Car getCar(int uid) throws RemoteException {
+	private Car getCar(int uid) throws RemoteException {
 		for (Car car : cars) {
 			if (car.getId() == uid)
 				return car;
@@ -90,7 +90,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 		throw new IllegalArgumentException("<" + name + "> No car with uid " + uid);
 	}
 	
-	public List<Car> getAvailableCars(String carType, Date start, Date end) throws RemoteException {
+	private List<Car> getAvailableCars(String carType, Date start, Date end) throws RemoteException {
 		List<Car> availableCars = new LinkedList<Car>();
 		for (Car car : cars) {
 			if (car.getType().getName().equals(carType) && car.isAvailable(start, end)) {

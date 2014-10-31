@@ -13,9 +13,6 @@ import java.util.StringTokenizer;
 
 /**
  * Sets up the server.
- * @author Michiel, Julie
- * 
- * TODO: Protect methods in car rental company that can bring the system into a bad state when called by client. 
  *
  */
 public class StartServer {
