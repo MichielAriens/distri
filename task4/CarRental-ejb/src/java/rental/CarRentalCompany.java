@@ -8,9 +8,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class CarRentalCompany {
-
+    
+    @Id
+    private int id;
+    
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     private String name;
     private List<Car> cars;

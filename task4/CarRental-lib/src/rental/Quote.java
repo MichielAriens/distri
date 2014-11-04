@@ -3,8 +3,12 @@ package rental;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class Quote implements Serializable {
-
+    
+    @Id
+    private int id;
+    
     private Date startDate;
     private Date endDate;
     private String carRenter;
