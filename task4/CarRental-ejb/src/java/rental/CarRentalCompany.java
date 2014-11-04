@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class CarRentalCompany {
@@ -19,7 +18,9 @@ public class CarRentalCompany {
     
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     private String name;
+    @OneToMany
     private List<Car> cars;
+    @ManyToMany
     private Set<CarType> carTypes = new HashSet<CarType>();
 
     /***************

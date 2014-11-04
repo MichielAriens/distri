@@ -2,13 +2,13 @@ package rental;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-@Entity
 public class Quote implements Serializable {
     
-    @Id
+
     private int id;
-    
     private Date startDate;
     private Date endDate;
     private String carRenter;

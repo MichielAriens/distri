@@ -3,15 +3,20 @@ package rental;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 
 @Entity
 public class Car {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    
+    @ManyToOne
     private CarType type;
+    
+    @OneToMany
     private Set<Reservation> reservations;
 
     /***************
