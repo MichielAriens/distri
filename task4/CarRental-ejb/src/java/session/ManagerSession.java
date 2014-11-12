@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
+import rental.CompanyLoader;
 import rental.Reservation;
 
 @Stateless
@@ -85,4 +86,15 @@ public class ManagerSession implements ManagerSessionRemote {
         }
         return out.size();
     }
+
+    @Override
+    public void addCarRentalCompany(String name, String configFile) {
+        CompanyLoader loader = new CompanyLoader(name, configFile);
+        CarRentalCompany crc = loader.loadRental();
+        em.persist(crc);
+    }
+    
+    
+    
+    
 }

@@ -17,4 +17,6 @@ public interface ManagerSessionRemote {
     public int getNumberOfReservations(String company, String type);
       
     public int getNumberOfReservationsBy(String renter);
+    
+    public void addCarRentalCompany(String name, String configFile);
 }

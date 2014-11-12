@@ -16,7 +16,7 @@ public class Car {
     @ManyToOne
     private CarType type;
     
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Reservation> reservations;
 
     /***************
@@ -27,10 +27,14 @@ public class Car {
         
     }
     
-    public Car(int uid, CarType type) {
-    	this.id = uid;
+    public Car(CarType type){
         this.type = type;
         this.reservations = new HashSet<Reservation>();
+    }
+    
+    public Car(int uid, CarType type) {
+        this(type);
+    	this.id = uid;
     }
 
     /******

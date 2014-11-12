@@ -19,9 +19,9 @@ public class CarRentalCompany {
     
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     private String name;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Car> cars;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<CarType> carTypes = new HashSet<CarType>();
 
     /***************
