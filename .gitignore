@@ -77,3 +77,10 @@ $RECYCLE.BIN/
 /task5/CarRental-ejb/nbproject/private/
 /task5/CarRental-lib/nbproject/private/
 /task5/CarRental-client/nbproject/private/
+/task4/CarRental-lib/dist/
+/task4/CarRental/build/
+/task4/CarRental-ejb/dist/
+/task4/CarRental-client/build/
+/task4/CarRental/dist/
+/task4/CarRental-client/dist/
+/task4/CarRental-ejb/build/

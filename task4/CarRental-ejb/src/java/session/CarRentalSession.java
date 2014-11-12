@@ -27,7 +27,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
     private List<Quote> quotes = new LinkedList<Quote>();
     
     private CarRentalCompany getCompany(String name){
-        Query query = em.createQuery("SELECT * FROM CarRentalCompany");
+        Query query = em.createQuery("SELECT e FROM CarRentalCompany e WHERE e.name LIKE :compName").setParameter("compName", name).setMaxResults(1);
         List<Object> results = query.getResultList();
         if(results.isEmpty()){
             return null;
@@ -42,7 +42,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     @Override
     public Set<String> getAllRentalCompanies() {
-        Query query = em.createQuery("SELECT * FROM CarRentalCompany");
+        Query query = em.createQuery("SELECT e FROM CarRentalCompany e");
         Set<String> retval = new HashSet<String>();
         for(Object o : query.getResultList()){
             retval.add(((CarRentalCompany)o).getName());

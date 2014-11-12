@@ -1,15 +1,22 @@
 package rental;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Reservation extends Quote {
-    
+   
     private int carId;
     
     /***************
      * CONSTRUCTOR *
      ***************/
+    
+    public Reservation(){
+        super();
+    }
 
     public Reservation(Quote quote, int carId) {
     	super(quote.getCarRenter(), quote.getStartDate(), quote.getEndDate(), 

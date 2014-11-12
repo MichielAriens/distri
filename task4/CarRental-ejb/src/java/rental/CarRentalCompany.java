@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class CarRentalCompany {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
@@ -26,6 +27,10 @@ public class CarRentalCompany {
     /***************
      * CONSTRUCTOR *
      ***************/
+    public CarRentalCompany(){
+        
+    }
+    
     
     public CarRentalCompany(String name, List<Car> cars) {
         logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);
