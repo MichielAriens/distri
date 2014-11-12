@@ -23,6 +23,10 @@ public class Car {
      * CONSTRUCTOR *
      ***************/
     
+    public Car(){
+        
+    }
+    
     public Car(int uid, CarType type) {
     	this.id = uid;
         this.type = type;

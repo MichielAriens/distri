@@ -25,10 +25,24 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     private String renter;
     private List<Quote> quotes = new LinkedList<Quote>();
+    
+    private CarRentalCompany getCompany(String name){
+        Query query = em.createQuery("SELECT * FROM CarRentalCompany");
+        List<Object> results = query.getResultList();
+        if(results.isEmpty()){
+            return null;
+        }else if(results.size() == 1){
+            return (CarRentalCompany) results.get(0);
+        }else{
+            //TODO define CarRentalCompany.name as unique.
+            throw new RuntimeException("More than one result found for a unique field");
+        }
+        
+    }
 
     @Override
     public Set<String> getAllRentalCompanies() {
-        Query query = em.createQuery("SELECT e FROM CarRentalCompany e");
+        Query query = em.createQuery("SELECT * FROM CarRentalCompany");
         Set<String> retval = new HashSet<String>();
         for(Object o : query.getResultList()){
             retval.add(((CarRentalCompany)o).getName());
@@ -38,14 +52,9 @@ public class CarRentalSession implements CarRentalSessionRemote {
     
     @Override
     public List<CarType> getAvailableCarTypes(Date start, Date end) {
-        
-        
-        
-        
-        
         List<CarType> availableCarTypes = new LinkedList<CarType>();
         for(String crc : getAllRentalCompanies()) {
-            for(CarType ct : RentalStore.getRentals().get(crc).getAvailableCarTypes(start, end)) {
+            for(CarType ct : getCompany(crc).getAvailableCarTypes(start, end)) {
                 if(!availableCarTypes.contains(ct))
                     availableCarTypes.add(ct);
             }
@@ -56,7 +65,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
     @Override
     public Quote createQuote(String company, ReservationConstraints constraints) throws ReservationException {
         try {
-            Quote out = RentalStore.getRental(company).createQuote(constraints, renter);
+            Quote out = getCompany(company).createQuote(constraints, renter);
             quotes.add(out);
             return out;
         } catch(Exception e) {
@@ -74,11 +83,11 @@ public class CarRentalSession implements CarRentalSessionRemote {
         List<Reservation> done = new LinkedList<Reservation>();
         try {
             for (Quote quote : quotes) {
-                done.add(RentalStore.getRental(quote.getRentalCompany()).confirmQuote(quote));
+                done.add(getCompany(quote.getRentalCompany()).confirmQuote(quote));
             }
         } catch (Exception e) {
             for(Reservation r:done)
-                RentalStore.getRental(r.getRentalCompany()).cancelReservation(r);
+                getCompany(r.getRentalCompany()).cancelReservation(r);
             throw new ReservationException(e);
         }
         return done;
