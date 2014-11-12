@@ -72,7 +72,7 @@ public class ManagerSession implements ManagerSessionRemote {
     }
     
     public CarRentalCompany getCompany(String company){
-        Query query = em.createQuery("SELECT e FROM CarRentalCompany e WHERE e.name LIKE :compName").setParameter("compName",company);
+        Query query = em.createQuery("SELECT e FROM CarRentalCompany e WHERE e.name LIKE :compName").setParameter("compName",company).setMaxResults(1);
         return (CarRentalCompany) query.getResultList().get(0);
     }
 
