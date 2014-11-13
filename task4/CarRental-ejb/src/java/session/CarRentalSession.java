@@ -18,27 +18,12 @@ import rental.ReservationConstraints;
 import rental.ReservationException;
 
 @Stateful
-public class CarRentalSession implements CarRentalSessionRemote {
+public class CarRentalSession extends Session implements CarRentalSessionRemote {
     
-    @PersistenceContext
-    EntityManager em;
+    
 
     private String renter;
     private List<Quote> quotes = new LinkedList<Quote>();
-    
-    private CarRentalCompany getCompany(String name){
-        Query query = em.createQuery("SELECT e FROM CarRentalCompany e WHERE e.name LIKE :compName").setParameter("compName", name).setMaxResults(1);
-        List<Object> results = query.getResultList();
-        if(results.isEmpty()){
-            return null;
-        }else if(results.size() == 1){
-            return (CarRentalCompany) results.get(0);
-        }else{
-            //TODO define CarRentalCompany.name as unique.
-            throw new RuntimeException("More than one result found for a unique field");
-        }
-        
-    }
 
     @Override
     public Set<String> getAllRentalCompanies() {

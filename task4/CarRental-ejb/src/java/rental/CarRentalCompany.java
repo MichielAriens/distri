@@ -1,5 +1,6 @@
 package rental;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -183,5 +184,69 @@ public class CarRentalCompany {
             }
         }
         return out;
+    }
+
+    public CarType getMostPopularCarType() {
+        CarType best = null;
+        for (CarType carType : getAllCarTypes()) {
+            if (best == null) {
+                best = carType;
+            }
+            if (getNumberOfReservationsForCarType(carType.getName())
+                    > getNumberOfReservationsForCarType(best.getName())) {
+                best = carType;
+            }
+        }
+        return best;
+    }
+
+    public Collection<CarType> getAllCarTypes() {
+        return carTypes;
+    }
+
+    public int getNumberOfReservationsForCarType(String carType) {
+        int numberOfRes = 0;
+        for (Car car : cars) {
+            Set<Reservation> reservations = car.getReservations();
+            for (Reservation reservation : reservations) {
+                if (reservation.getCarType().equals(carType)) {
+                    numberOfRes++;
+                }
+            }
+        }
+        return numberOfRes;
+    }
+    
+    public List<String> getBestCustomers(){
+        List<String> best = new ArrayList<String>();
+        int res = 0;
+        for (String cust : getAllCustomers()) {
+            if (getReservationsBy(cust).size() == res) {
+                best.add(cust);
+            }
+            if (getReservationsBy(cust).size() > res) {
+                res = getReservationsBy(cust).size();
+                best.clear();
+                best.add(cust);
+            }
+        }
+        return best;
+    }
+
+    private Set<String> getAllCustomers() {
+        List<Reservation> reservations = getAllReservations();
+        Set<String> customers = new HashSet<String>();
+        for (Reservation reservation : reservations) {
+            customers.add(reservation.getCarRenter());
+        }
+        return customers;
+    }
+    
+    private List<Reservation> getAllReservations() {
+        List<Reservation> reservations = new ArrayList<Reservation>();
+        for (Car car : cars) {
+            reservations.addAll(car.getReservations());
+        }
+        return reservations;
     }
 }

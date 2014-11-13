@@ -1,12 +1,11 @@
 package session;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import rental.Car;
 import rental.CarRentalCompany;
@@ -15,10 +14,8 @@ import rental.CompanyLoader;
 import rental.Reservation;
 
 @Stateless
-public class ManagerSession implements ManagerSessionRemote {
+public class ManagerSession extends Session implements ManagerSessionRemote {
     
-    @PersistenceContext
-    EntityManager em;
     
     @Override
     public Set<CarType> getCarTypes(String company) {
@@ -71,11 +68,6 @@ public class ManagerSession implements ManagerSessionRemote {
         }
         return out.size();
     }
-    
-    public CarRentalCompany getCompany(String company){
-        Query query = em.createQuery("SELECT e FROM CarRentalCompany e WHERE e.name LIKE :compName").setParameter("compName",company).setMaxResults(1);
-        return (CarRentalCompany) query.getResultList().get(0);
-    }
 
     @Override
     public int getNumberOfReservationsBy(String renter) {
@@ -92,6 +84,33 @@ public class ManagerSession implements ManagerSessionRemote {
         CompanyLoader loader = new CompanyLoader(name, configFile);
         CarRentalCompany crc = loader.loadRental();
         em.persist(crc);
+    }
+
+    @Override
+    public CarType getMostPopularCarTypeIn(String carRentalCompanyName) {
+        return getCompany(carRentalCompanyName).getMostPopularCarType();
+    }
+
+    @Override
+    public Set<String> getBestClients() {
+        Set<String> best = new HashSet<String>();
+        int res = 0;
+        for (CarRentalCompany crc : getAllCompanies()) {
+            List<String> bestCustomers = crc.getBestCustomers();
+            if (!bestCustomers.isEmpty()) {
+                int numb = getNumberOfReservationsBy(bestCustomers.get(0));
+                if (numb == res) {
+                    best.addAll(bestCustomers);
+                }
+                if (numb > res) {
+                    best.clear();
+                    best.addAll(bestCustomers);
+                    res = numb;
+                }
+            }
+        }
+
+        return best;
     }
     
     

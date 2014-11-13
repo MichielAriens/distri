@@ -19,4 +19,8 @@ public interface ManagerSessionRemote {
     public int getNumberOfReservationsBy(String renter);
     
     public void addCarRentalCompany(String name, String configFile);
+
+    public CarType getMostPopularCarTypeIn(String carRentalCompanyName);
+
+    public Set<String> getBestClients();
 }
