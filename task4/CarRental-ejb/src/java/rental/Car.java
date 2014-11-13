@@ -13,7 +13,7 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private CarType type;
     
     @OneToMany(cascade = CascadeType.PERSIST)
@@ -32,7 +32,7 @@ public class Car {
         this.reservations = new HashSet<Reservation>();
     }
     
-    public Car(int uid, CarType type) {
+    private Car(int uid, CarType type) {
         this(type);
     	this.id = uid;
     }

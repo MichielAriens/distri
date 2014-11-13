@@ -7,6 +7,10 @@ import javax.persistence.Id;
 
 @Entity
 public class Reservation extends Quote {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
    
     private int carId;
     

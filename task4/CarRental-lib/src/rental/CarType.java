@@ -10,6 +10,7 @@ import javax.persistence.Id;
 public class CarType implements Serializable{
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
     private String name;
