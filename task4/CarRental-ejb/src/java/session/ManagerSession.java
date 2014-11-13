@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import rental.Car;
@@ -15,6 +17,7 @@ import rental.Reservation;
 
 @Stateless
 public class ManagerSession extends Session implements ManagerSessionRemote {
+    
     
     
     @Override

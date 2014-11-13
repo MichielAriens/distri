@@ -61,11 +61,6 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
         });
         
         t1.start();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
         t2.start();
     }
     
