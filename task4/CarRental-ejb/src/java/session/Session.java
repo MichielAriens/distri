@@ -37,7 +37,7 @@ public class Session {
     protected Collection<CarRentalCompany> getAllCompanies(){
         Query query = em.createQuery("SELECT e FROM CarRentalCompany e");
         List<Object> results = query.getResultList();
-        return (List<CarRentalCompany>)(List<?>) results;//Hacky solution ok, we know all objects will be CarRentalCompanies
+        return (List<CarRentalCompany>)(List<?>) results;//Hacky solution but we know all objects will be CarRentalCompanies
     }
     
 }

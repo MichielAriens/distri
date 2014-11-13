@@ -85,4 +85,18 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
         }
         renter = name;
     }
+
+    @Override
+    public String getCheapestCarType(Date start, Date end) {
+        CarType ct = null;
+        for (CarType carType : getAvailableCarTypes(start, end)) {
+            if (ct == null) {
+                ct = carType;
+            }
+            if (carType.getRentalPricePerDay() < ct.getRentalPricePerDay()) {
+                ct = carType;
+            }
+        }
+        return ct.getName();
+    }
 }

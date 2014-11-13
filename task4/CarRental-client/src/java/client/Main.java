@@ -10,6 +10,7 @@ import session.CarRentalSessionRemote;
 import session.ManagerSessionRemote;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rental.ReservationException;
 
 public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, ManagerSessionRemote> {
 
@@ -22,7 +23,50 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
 
     public static void main(String[] args) throws Exception {
         //TODO: use updated manager interface to load cars into companies
-        new Main("trips").run();
+        new Main("trips").run2();
+    }
+    
+    private void run2(){
+        final ReservationConstraints cons = new ReservationConstraints(new Date(2014,10,30), new Date(2014,10,31), "Special");
+        Thread t1 = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    CarRentalSessionRemote ses = getNewReservationSession("Bob");   
+                    ses.createQuote("Hertz", cons);
+                    ses.confirmQuotes();
+                }catch(ReservationException e){
+                    System.err.println("Reservation exception as expected.");
+                    e.printStackTrace();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }  
+        });
+        
+        Thread t2 = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    CarRentalSessionRemote ses = getNewReservationSession("Jeff");
+                    ses.createQuote("Hertz", cons);
+                    ses.confirmQuotes();
+                }catch(ReservationException e){
+                    System.err.println("Reservation exception as expected.");
+                    e.printStackTrace();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }  
+        });
+        
+        t1.start();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        t2.start();
     }
     
     @Override
@@ -78,7 +122,6 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
 
     @Override
     protected String getCheapestCarType(CarRentalSessionRemote session, Date start, Date end) throws Exception {
-        System.err.println("To be implemented.");
-        return null;
+        return session.getCheapestCarType(start, end);
     }
 }
