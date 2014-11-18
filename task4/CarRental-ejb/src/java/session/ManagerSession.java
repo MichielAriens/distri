@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import javax.print.attribute.HashAttributeSet;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
@@ -22,13 +23,8 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
     
     @Override
     public Set<CarType> getCarTypes(String company) {
-        try {
-            CarRentalCompany crc = getCompany(company);
-            return new HashSet<CarType>(crc.getAllTypes());
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        List<CarType> results = em.createNamedQuery("CarRentalCompany.findAllCarTypes").getResultList();
+        return new HashSet<CarType>(results);
     }
 
     @Override
@@ -47,7 +43,7 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
     }
 
     @Override
-    public int getNumberOfReservations(String company, String type, int id) {
+    public int getNumberOfReservations(String company, int id) {
         try {
             CarRentalCompany crc = getCompany(company);
             return crc.getCar(id).getReservations().size();
@@ -59,27 +55,19 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
 
     @Override
     public int getNumberOfReservations(String company, String type) {
-        Set<Reservation> out = new HashSet<Reservation>();
-        try {
-            CarRentalCompany crc = getCompany(company);
-            for(Car c: crc.getCars(type)){
-                out.addAll(c.getReservations());
-            }
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
-        }
-        return out.size();
+        long retval = em.createNamedQuery("Reservation.countPerTypeAndCompany", Long.class).
+                setParameter("company", company).
+                setParameter("type", type).
+                getSingleResult();
+        return (int) retval;
     }
 
     @Override
     public int getNumberOfReservationsBy(String renter) {
-        Set<Reservation> out = new HashSet<Reservation>();
-        Query query = em.createQuery("SELECT e FROM CarRentalCompany e");
-        for(Object crc : query.getResultList()) {
-            out.addAll(((CarRentalCompany)crc).getReservationsBy(renter));
-        }
-        return out.size();
+        long retval = em.createNamedQuery("Reservation.countPerCustomer", Long.class).
+                setParameter("customer", renter).
+                getSingleResult();
+        return (int) retval;
     }
 
     @Override
@@ -91,29 +79,32 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
 
     @Override
     public CarType getMostPopularCarTypeIn(String carRentalCompanyName) {
-        return getCompany(carRentalCompanyName).getMostPopularCarType();
+        String carTypeName = em.createNamedQuery("Reservation.getBestType", String.class).setParameter("company", carRentalCompanyName).getSingleResult();
+        return em.createNamedQuery("CarType.getByName", CarType.class).setParameter("name", carTypeName).getSingleResult();
+    }
+    
+    /**
+     * results = list<X> with for every element X: X[0]: String and X[1]: int ordered so that results.get(O)[1] is the highest int in the list
+     */
+    private Set<String> getBest(List<Object[]> results){
+        Set<String> retval = new HashSet<String>();
+        if(results.isEmpty())
+            return retval;
+        long max = (Long) results.get(0)[1];
+        for(Object[] o : results){
+            if (((Long) o[1]).equals(max)){
+                retval.add((String) o[0]);
+            }else{
+                break;
+            }
+        }
+        return retval;
     }
 
     @Override
     public Set<String> getBestClients() {
-        Set<String> best = new HashSet<String>();
-        int res = 0;
-        for (CarRentalCompany crc : getAllCompanies()) {
-            List<String> bestCustomers = crc.getBestCustomers();
-            if (!bestCustomers.isEmpty()) {
-                int numb = getNumberOfReservationsBy(bestCustomers.get(0));
-                if (numb == res) {
-                    best.addAll(bestCustomers);
-                }
-                if (numb > res) {
-                    best.clear();
-                    best.addAll(bestCustomers);
-                    res = numb;
-                }
-            }
-        }
-
-        return best;
+        List<Object[]> results = em.createNamedQuery("Reservation.getBestCustomer").getResultList();
+        return getBest(results);
     }
     
     

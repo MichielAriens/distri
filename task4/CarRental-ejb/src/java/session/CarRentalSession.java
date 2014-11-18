@@ -73,7 +73,6 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
             for (Quote quote : quotes) {
                 done.add(getCompany(quote.getRentalCompany()).confirmQuote(quote));
             }
-            checkConstraints();
         } catch (ReservationException e) {
             context.setRollbackOnly();
             throw e;
