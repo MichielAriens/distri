@@ -32,12 +32,9 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
 
     @Override
     public Set<String> getAllRentalCompanies() {
-        Query query = em.createQuery("SELECT e FROM CarRentalCompany e");
-        Set<String> retval = new HashSet<String>();
-        for(Object o : query.getResultList()){
-            retval.add(((CarRentalCompany)o).getName());
-        }
-        return retval;
+        Query query = em.createNamedQuery("CarRentalCompany.findAllNames");
+        List<String> results = query.getResultList();
+        return new HashSet<String>(results);
     }
     
     @Override
