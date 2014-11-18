@@ -12,6 +12,14 @@ import java.util.logging.Logger;
 import javax.persistence.*;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name = "CarRentalComapany.findAll",
+            query = "SELECT c FROM CarRentalCompany c"),
+    @NamedQuery(
+            name = "CarRentalCompany.findAllNames",
+            query = "SELECT c.name FROM CarRentalCompany c")
+})
 public class CarRentalCompany {
     
     @Id
