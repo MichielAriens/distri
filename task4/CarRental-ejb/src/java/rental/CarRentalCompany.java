@@ -18,7 +18,10 @@ import javax.persistence.*;
             query = "SELECT c FROM CarRentalCompany c"),
     @NamedQuery(
             name = "CarRentalCompany.findAllNames",
-            query = "SELECT c.name FROM CarRentalCompany c")
+            query = "SELECT c.name FROM CarRentalCompany c"),
+    @NamedQuery(
+            name = "CarRentalCompany.findAllCarTyped",
+            query = "SELECT t FROM "),
 })
 public class CarRentalCompany {
     
