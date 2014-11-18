@@ -79,8 +79,9 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
 
     @Override
     public CarType getMostPopularCarTypeIn(String carRentalCompanyName) {
-        String carTypeName = em.createNamedQuery("Reservation.getBestType", String.class).setParameter("company", carRentalCompanyName).getSingleResult();
-        return em.createNamedQuery("CarType.getByName", CarType.class).setParameter("name", carTypeName).getSingleResult();
+        //String carTypeName = em.createNamedQuery("Reservation.getBestType", String.class).setParameter("company", carRentalCompanyName).getSingleResult();
+        //return em.createNamedQuery("CarType.getByName", CarType.class).setParameter("name", carTypeName).getSingleResult();
+        return getCompany(carRentalCompanyName).getMostPopularCarType();
     }
     
     /**

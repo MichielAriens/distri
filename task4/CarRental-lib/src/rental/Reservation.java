@@ -28,10 +28,10 @@ import javax.persistence.NamedQuery;
                     + "ORDER BY COUNT(r.carRenter) DESC "),
     @NamedQuery(
             name = "Reservation.getBestType",
-            query = "SELECT r.carType, COUNT(r.carType) FROM Reservation r WHERE r.rentalCompany = :company "
+            query = "SELECT r.carType FROM Reservation r WHERE r.rentalCompany = :company "
                     + "GROUP BY r.carType "
-                    + "ORDER BY COUNT(r.carType) DESC, "
-                    + "LIMIT 1")
+                    + "ORDER BY COUNT(r.carType) DESC "
+                    + "")
 })
 public class Reservation extends Quote {
     
