@@ -12,7 +12,30 @@ import javax.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
             name = "CarType.getByName",
-            query = "SELECT e FROM CarType e WHERE e.name = :name")
+            query = "SELECT e FROM CarType e WHERE e.name = :name"),
+    @NamedQuery(
+            name = "CarType.getAvailable",
+            query = "SELECT DISTINCT e.type FROM Car e WHERE " +
+                        "NOT EXISTS ( " +
+                            "SELECT r.carType FROM Reservation r WHERE " +
+                            "r.carId = e.id " +
+                            "AND( " +
+                                "(r.startDate >= :start AND r.startDate <= :end) " +
+                                "OR (r.endDate >= :start AND r.endDate <= :end))"
+                    + " ) ")
+    
+    
+    /**
+    @NamedQuery(
+            name = "CarType.getAvailable",
+            query = "SELECT e FROM CarType e WHERE "
+                    + "NOT EXISTS ("
+                    + "             SELECT r FROM Reservation r WHERE"
+                    + "             r.carType = e.name "
+                    + "             AND ("
+                    + "             (r.startDate >= :start AND r.startDate <= :end) "
+                    + "             OR (r.endDate >= :start AND r.endDate <= :end)))")
+                    * */
 })
 public class CarType implements Serializable{
     

@@ -1,5 +1,6 @@
 package session;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,11 +11,7 @@ import javax.ejb.EJBContext;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.persistence.Query;
-import javax.transaction.UserTransaction;
-import rental.CarRentalCompany;
 import rental.CarType;
 import rental.Quote;
 import rental.Reservation;
@@ -39,14 +36,10 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
     
     @Override
     public List<CarType> getAvailableCarTypes(Date start, Date end) {
-        List<CarType> availableCarTypes = new LinkedList<CarType>();
-        for(String crc : getAllRentalCompanies()) {
-            for(CarType ct : getCompany(crc).getAvailableCarTypes(start, end)) {
-                if(!availableCarTypes.contains(ct))
-                    availableCarTypes.add(ct);
-            }
-        }
-        return availableCarTypes;
+        return em.createNamedQuery("CarType.getAvailable", CarType.class)
+                .setParameter("start", start)
+                .setParameter("end", end)
+                .getResultList();
     }
 
     @Override
@@ -66,12 +59,22 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
     }
     
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<Reservation> confirmQuotes() throws ReservationException {
         List<Reservation> done = new LinkedList<Reservation>();
         try {
             for (Quote quote : quotes) {
-                done.add(getCompany(quote.getRentalCompany()).confirmQuote(quote));
+                Reservation res = getCompany(quote.getRentalCompany()).confirmQuote(quote);
+                if(em.createNamedQuery("Car.getReservationsAt")
+                        .setParameter("carId", res.getCarId())
+                        .setParameter("start", res.getStartDate())
+                        .setParameter("end", res.getEndDate())
+                        .getResultList()
+                        .size() == 1){
+                    done.add(res);
+                }else{
+                    throw new ReservationException("Concurrent confirm attempted. Aborting one.");
+                }
             }
         } catch (ReservationException e) {
             context.setRollbackOnly();
@@ -90,15 +93,25 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
 
     @Override
     public String getCheapestCarType(Date start, Date end) {
-        CarType ct = null;
-        for (CarType carType : getAvailableCarTypes(start, end)) {
-            if (ct == null) {
-                ct = carType;
-            }
-            if (carType.getRentalPricePerDay() < ct.getRentalPricePerDay()) {
-                ct = carType;
-            }
+        List<CarType> availableTypes = em.createNamedQuery("CarType.getAvailable",CarType.class)
+                .setParameter("start", start)
+                .setParameter("end", end)
+                .getResultList();
+        availableTypes.sort(new Comparator<CarType>(){
+            @Override
+            public int compare(CarType o1, CarType o2) {
+                return Double.compare(o1.getRentalPricePerDay(), o2.getRentalPricePerDay());
+            }  
+        });
+        System.err.println("findme");
+        for(CarType t : availableTypes){
+            System.err.println(t.toString());
         }
-        return ct.getName();
+        if(availableTypes.isEmpty())
+            return null;
+        else{
+            return availableTypes.get(0).getName();
+        }
+        
     }
 }

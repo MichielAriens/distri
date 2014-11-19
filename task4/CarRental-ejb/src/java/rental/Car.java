@@ -7,6 +7,18 @@ import javax.persistence.*;
 
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name = "Car.getAllIds",
+            query = "SELECT e.id FROM Car e"),
+    @NamedQuery(
+            name = "Car.getReservationsAt",
+            query = "SELECT r FROM Reservation r WHERE " +
+                    "r.carId = :carId " +
+                    "AND( " +
+                        "(r.startDate >= :start AND r.startDate <= :end) " +
+                        "OR (r.endDate >= :start AND r.endDate <= :end))")
+})
 public class Car {
     
     @Id

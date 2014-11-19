@@ -29,17 +29,7 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
 
     @Override
     public Set<Integer> getCarIds(String company, String type) {
-        Set<Integer> out = new HashSet<Integer>();
-        try {
-            CarRentalCompany crc = getCompany(company);
-            for(Car c: crc.getCars(type)){
-                out.add(c.getId());
-            }
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-        return out;
+        return new HashSet<Integer>(em.createNamedQuery("Car.getAllIds",Integer.class).getResultList());
     }
 
     @Override
