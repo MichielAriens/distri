@@ -23,4 +23,8 @@ public interface ManagerSessionRemote {
     public CarType getMostPopularCarTypeIn(String carRentalCompanyName);
 
     public Set<String> getBestClients();
+
+    public void addCarType(String company, String name, int nbOfSeats, float trunkSpace, double rentalPricePerDay, boolean smokingAllowed);
+
+    public void addCar(String company, String carType);
 }

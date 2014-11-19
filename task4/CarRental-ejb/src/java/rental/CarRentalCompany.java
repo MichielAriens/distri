@@ -14,14 +14,18 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
     @NamedQuery(
-            name = "CarRentalComapany.findAll",
+            name = "CarRentalCompany.findAll",
             query = "SELECT c FROM CarRentalCompany c"),
     @NamedQuery(
             name = "CarRentalCompany.findAllNames",
             query = "SELECT c.name FROM CarRentalCompany c"),
     @NamedQuery(
             name = "CarRentalCompany.findAllCarTypes",
-            query = "SELECT c.carTypes FROM CarRentalCompany c")
+            query = "SELECT c.carTypes FROM CarRentalCompany c"),
+    @NamedQuery(
+            name = "CarRentalCompany.getByName",
+            query = "SELECT e FROM CarRentalCompany e WHERE e.name = :compName")
+        
 })
 public class CarRentalCompany {
     
@@ -259,5 +263,13 @@ public class CarRentalCompany {
             reservations.addAll(car.getReservations());
         }
         return reservations;
+    }
+    
+    public void addCarType(CarType carType){
+        carTypes.add(carType);
+    }
+    
+    public void addCar(Car car){
+        cars.add(car);
     }
 }
