@@ -73,7 +73,6 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
                 .setParameter("compName", company).getSingleResult();
         CarType carType = new CarType(name, nbOfSeats, trunkSpace, rentalPricePerDay, smokingAllowed);
         crc.addCarType(carType);
-        //em.persist(crc);
     }
     
     @Override
@@ -84,7 +83,6 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
                 .setParameter("name", carType).getSingleResult();
         Car car = new Car(type);
         crc.addCar(car);
-        //em.persist(crc);
     }
 
 
