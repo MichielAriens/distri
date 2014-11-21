@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateful;
@@ -24,8 +22,8 @@ import rental.ReservationException;
 @Stateful
 public class CarRentalSession extends Session implements CarRentalSessionRemote {
     
-    private static int RETRIES_IN_DEADLOCK = 2;
-    private static int DEADLOCK_WAIT_LIMIT = 1000;
+    private static final int RETRIES_IN_DEADLOCK = 2;
+    private static final int DEADLOCK_WAIT_LIMIT = 1000;
     
     @Resource
     private EJBContext context;
@@ -64,15 +62,25 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
         return quotes;
     }
     
+    /**
+     * Will attempt to confirm all quotes in the session.
+     * If this fails because the state on the server has changed (cars no longer available) a ReservationException is thrown
+     * This method is thread safe: the system will not go into an illegal state. There is however a small chance of deadlock.
+     * In case of deadlock the method will retry after a certain timeout. 
+     * If the problem persists (in case of a system error) the method will eventually fail with a ReservationException.
+     */
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<Reservation> confirmQuotes() throws ReservationException {
         return confirmQuotes(RETRIES_IN_DEADLOCK);
     }
     
+    /**
+     * Implementation of confirmQuotes with retry.
+     */ 
     private List<Reservation> confirmQuotes(int tries) throws ReservationException{
         if(tries <= 0)
-            throw new ReservationException("Retry limit reached: Possible deadlock when confirming quotes");
+            throw new ReservationException("Retry limit reached: Possible deadlock or system error when confirming quotes");
         List<Reservation> done = new LinkedList<Reservation>();
         try {
             for (Quote quote : quotes) {

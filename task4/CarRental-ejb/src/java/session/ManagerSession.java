@@ -5,16 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
-import javax.persistence.Query;
-import javax.print.attribute.HashAttributeSet;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
 import rental.CompanyLoader;
-import rental.Reservation;
 
 @Stateless
 public class ManagerSession extends Session implements ManagerSessionRemote {
@@ -73,7 +68,6 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
                 .setParameter("compName", company).getSingleResult();
         CarType carType = new CarType(name, nbOfSeats, trunkSpace, rentalPricePerDay, smokingAllowed);
         crc.addCarType(carType);
-        //em.persist(crc);
     }
     
     @Override
@@ -84,7 +78,6 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
                 .setParameter("name", carType).getSingleResult();
         Car car = new Car(type);
         crc.addCar(car);
-        //em.persist(crc);
     }
 
 
@@ -99,7 +92,7 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
     }
     
     /**
-     * results = list<X> with for every element X: X[0]: String and X[1]: int ordered so that results.get(O)[1] is the highest int in the list
+     * results = list<X> with for every element X: X[0]: String and X[1]: int ordered so that results.get(O)[1] is the highest int in the list.
      */
     private Set<String> getBest(List<Object[]> results){
         Set<String> retval = new HashSet<String>();

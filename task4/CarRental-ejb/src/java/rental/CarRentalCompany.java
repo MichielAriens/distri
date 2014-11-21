@@ -85,6 +85,7 @@ public class CarRentalCompany {
         throw new IllegalArgumentException("<" + carTypeName + "> No cartype of name " + carTypeName);
     }
 
+
     public boolean isAvailable(String carTypeName, Date start, Date end) {
         logger.log(Level.INFO, "<{0}> Checking availability for car type {1}", new Object[]{name, carTypeName});
         return getAvailableCarTypes(start, end).contains(getType(carTypeName));
@@ -201,6 +202,7 @@ public class CarRentalCompany {
         return out;
     }
 
+    @Deprecated
     public CarType getMostPopularCarType() {
         CarType best = null;
         for (CarType carType : getAllCarTypes()) {
@@ -218,7 +220,8 @@ public class CarRentalCompany {
     public Collection<CarType> getAllCarTypes() {
         return carTypes;
     }
-
+    
+    @Deprecated
     public int getNumberOfReservationsForCarType(String carType) {
         int numberOfRes = 0;
         for (Car car : cars) {
@@ -232,6 +235,7 @@ public class CarRentalCompany {
         return numberOfRes;
     }
     
+    @Deprecated
     public List<String> getBestCustomers(){
         List<String> best = new ArrayList<String>();
         int res = 0;
@@ -248,6 +252,7 @@ public class CarRentalCompany {
         return best;
     }
 
+    @Deprecated
     private Set<String> getAllCustomers() {
         List<Reservation> reservations = getAllReservations();
         Set<String> customers = new HashSet<String>();
@@ -257,6 +262,7 @@ public class CarRentalCompany {
         return customers;
     }
     
+    @Deprecated
     private List<Reservation> getAllReservations() {
         List<Reservation> reservations = new ArrayList<Reservation>();
         for (Car car : cars) {
