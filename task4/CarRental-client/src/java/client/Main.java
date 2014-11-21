@@ -1,15 +1,12 @@
 package client;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import javax.naming.InitialContext;
 import rental.CarType;
 import rental.ReservationConstraints;
 import session.CarRentalSessionRemote;
 import session.ManagerSessionRemote;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rental.ReservationException;
 
 public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, ManagerSessionRemote> {
@@ -39,8 +36,8 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
                     ses.createQuote("Hertz", cons);
                     ses.confirmQuotes();
                 }catch(ReservationException e){
-                    System.err.println("Reservation exception as expected.");
-                    e.printStackTrace();
+                    System.out.println("Reservation exception as expected.");
+                    //e.printStackTrace();
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -55,8 +52,8 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
                     ses.createQuote("Hertz", cons);
                     ses.confirmQuotes();
                 }catch(ReservationException e){
-                    System.err.println("Reservation exception as expected.");
-                    e.printStackTrace();
+                    System.out.println("Reservation exception as expected.");
+                    //e.printStackTrace();
                 }catch(Exception e){
                     e.printStackTrace();
                 }
