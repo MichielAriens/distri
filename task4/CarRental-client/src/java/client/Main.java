@@ -26,6 +26,9 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
         new Main("trips").run();
     }
     
+    /**
+     * A simple test to test simultaneous requests.
+     */
     private void run2(){
         final ReservationConstraints cons = new ReservationConstraints(new Date(2014,10,30), new Date(2014,10,31), "Special");
         Thread t1 = new Thread(new Runnable(){

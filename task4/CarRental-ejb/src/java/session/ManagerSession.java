@@ -95,7 +95,7 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
                 .setMaxResults(1)
                 .getResultList()
                 .get(0);
-        return em.createNamedQuery("CarType.getByName", CarType.class).setParameter("name", carTypeName).getSingleResult();
+        return em.createNamedQuery("CarType.getByName", CarType.class).setParameter("name", carTypeName).getResultList().get(0);
     }
     
     /**
