@@ -23,7 +23,7 @@ public class Main extends AbstractScriptedTripTest<CarRentalSessionRemote, Manag
 
     public static void main(String[] args) throws Exception {
         //TODO: use updated manager interface to load cars into companies
-        new Main("trips").run2();
+        new Main("trips").run();
     }
     
     private void run2(){

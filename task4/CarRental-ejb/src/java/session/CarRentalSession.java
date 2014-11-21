@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateful;
@@ -20,6 +23,9 @@ import rental.ReservationException;
 
 @Stateful
 public class CarRentalSession extends Session implements CarRentalSessionRemote {
+    
+    private static int RETRIES_IN_DEADLOCK = 2;
+    private static int DEADLOCK_WAIT_LIMIT = 1000;
     
     @Resource
     private EJBContext context;
@@ -61,6 +67,12 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<Reservation> confirmQuotes() throws ReservationException {
+        return confirmQuotes(RETRIES_IN_DEADLOCK);
+    }
+    
+    private List<Reservation> confirmQuotes(int tries) throws ReservationException{
+        if(tries <= 0)
+            throw new ReservationException("Retry limit reached: Possible deadlock when confirming quotes");
         List<Reservation> done = new LinkedList<Reservation>();
         try {
             for (Quote quote : quotes) {
@@ -79,6 +91,12 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
         } catch (ReservationException e) {
             context.setRollbackOnly();
             throw e;
+        } catch (Exception e){
+            //Possible deadlock, retry
+            try { 
+                Thread.sleep(new Random().nextInt(DEADLOCK_WAIT_LIMIT));
+            } catch (InterruptedException ex) {/*Ignore*/}
+            return confirmQuotes(tries - 1);
         }
         return done;
     }
