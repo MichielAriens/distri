@@ -33,7 +33,10 @@ import ds.gae.ReservationException;
 	),
 	@NamedQuery(
 			name = "CarRentalCompany.getAllTypes",
-			query = "SELECT VALUE(c.carTypes) FROM CarRentalCompany c WHERE c.name = :name")
+			query = "SELECT VALUE(c.carTypes) FROM CarRentalCompany c WHERE c.name = :name"),
+	@NamedQuery(
+			name = "CarRentalCompany.getCarsByCarType",
+			query = "SELECT c FROM Car c, CarRentalCompany crc WHERE crc.name = :name AND c IN crc.cars AND c.type = :carType")
 })
 public class CarRentalCompany {
 

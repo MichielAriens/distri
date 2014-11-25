@@ -126,21 +126,9 @@ public class CarRentalModel {
 	 * @return	the list of reservations of the given car renter
 	 */
 	public List<Reservation> getReservations(String renter) {
-		// FIXME: use persistence instead
-		
-		List<Reservation> out = new ArrayList<Reservation>();
-		
-    	for (CarRentalCompany crc : CRCS.values()) {
-    		for (Car c : crc.getCars()) {
-    			for (Reservation r : c.getReservations()) {
-    				if (r.getCarRenter().equals(renter)) {
-    					out.add(r);
-    				}
-    			}
-    		}
-    	}
-    	
-    	return out;
+		return em.createNamedQuery("Reservation.getByRenter", Reservation.class)
+				.setParameter("name", renter)
+				.getResultList();
     }
 
     /**
@@ -201,17 +189,11 @@ public class CarRentalModel {
 	 * @return	List of cars of the given car type
 	 */
 	private List<Car> getCarsByCarType(String crcName, CarType carType) {				
-		// FIXME: use persistence instead
-
-		List<Car> out = new ArrayList<Car>(); 
-		for(CarRentalCompany crc : CRCS.values()) {
-			for (Car c : crc.getCars()) {
-				if (c.getType() == carType) { 
-					out.add(c);
-				}
-			}
-		}
-		return out;
+		
+		return em.createNamedQuery("CarRentalCompany.getCarsByCarType", Car.class)
+				.setParameter("name", crcName)
+				.setParameter("carType", carType)
+				.getResultList();
 	}
 
 	/**
