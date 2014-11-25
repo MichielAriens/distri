@@ -7,12 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.google.appengine.api.datastore.Key;
+
 @MappedSuperclass
 public class Quote {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Key id;
 	
     private Date startDate;
     private Date endDate;

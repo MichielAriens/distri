@@ -16,9 +16,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+
+import com.google.appengine.api.datastore.Key;
 
 import ds.gae.ReservationException;
 
@@ -47,11 +50,12 @@ public class CarRentalCompany {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
+	//private long id;
 	private String name;
-	@OneToMany(cascade = CascadeType.ALL)  
+	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carRentalCompany")
 	private Set<Car> cars;
+	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carRentalCompany")
+	@MapKey(name = "name")
 	private Map<String,CarType> carTypes = new HashMap<String, CarType>();
 
 	/***************
