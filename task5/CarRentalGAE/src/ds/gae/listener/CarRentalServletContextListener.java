@@ -9,15 +9,23 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import ds.gae.CarRentalModel;
+import ds.gae.EMF;
 import ds.gae.entities.Car;
 import ds.gae.entities.CarRentalCompany;
 import ds.gae.entities.CarType;
 
 public class CarRentalServletContextListener implements ServletContextListener {
+	
+	private EntityManager em;
+	
+	public CarRentalServletContextListener() {
+		em = EMF.get().createEntityManager();
+	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
@@ -32,14 +40,15 @@ public class CarRentalServletContextListener implements ServletContextListener {
 	
 	private boolean isDummyDataAvailable() {
 		// If the Hertz car rental company is in the datastore, we assume the dummy data is available
-
-		// FIXME: use persistence instead
-		return CarRentalModel.get().CRCS.containsKey("Hertz");
-
+		
+		return em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+				.setParameter("name", "Hertz")
+				.getResultList()
+				.size() == 1;
 	}
 	
 	private void addDummyData() {
-		loadRental("Hertz","hertz.csv");
+		loadRental("Hertz","hertz.csv"); 
         loadRental("Dockx","dockx.csv");
 	}
 	
@@ -50,8 +59,8 @@ public class CarRentalServletContextListener implements ServletContextListener {
             Set<Car> cars = loadData(name, datafile);
             CarRentalCompany company = new CarRentalCompany(name, cars);
             
-    		// FIXME: use persistence instead
-            CarRentalModel.get().CRCS.put(name, company);
+    		em.persist(company);
+            //CarRentalModel.get().CRCS.put(name, company);
 
         } catch (NumberFormatException ex) {
             Logger.getLogger(CarRentalServletContextListener.class.getName()).log(Level.SEVERE, "bad file", ex);

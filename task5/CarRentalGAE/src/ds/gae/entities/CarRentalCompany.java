@@ -11,11 +11,37 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 import ds.gae.ReservationException;
 
+@Entity
+@NamedQueries({
+	@NamedQuery(
+			name = "CarRentalCompany.getByName",
+			query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
+	),
+	@NamedQuery(
+			name = "CarRentalCompany.getAllNames",
+			query = "SELECT c.name FROM CarRentalCompany c"
+	),
+	@NamedQuery(
+			name = "CarRentalCompany.getAllTypes",
+			query = "SELECT VALUE(c.carTypes) FROM CarRentalCompany c WHERE c.name = :name")
+})
 public class CarRentalCompany {
 
 	private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
 	private String name;
 	private Set<Car> cars;
@@ -24,6 +50,10 @@ public class CarRentalCompany {
 	/***************
 	 * CONSTRUCTOR *
 	 ***************/
+	
+	public CarRentalCompany(){
+		this.cars = new HashSet<>();
+	}
 
 	public CarRentalCompany(String name, Set<Car> cars) {
 		logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+
 import ds.gae.entities.Car;
 import ds.gae.entities.CarRentalCompany;
 import ds.gae.entities.CarType;
@@ -16,14 +18,21 @@ import ds.gae.entities.ReservationConstraints;
  
 public class CarRentalModel {
 	
-	public Map<String,CarRentalCompany> CRCS = new HashMap<String, CarRentalCompany>();	
+	//public Map<String,CarRentalCompany> CRCS = new HashMap<String, CarRentalCompany>();	
 	
 	private static CarRentalModel instance;
+
+	private EntityManager em;
+	
 	
 	public static CarRentalModel get() {
 		if (instance == null)
 			instance = new CarRentalModel();
 		return instance;
+	}
+	
+	public CarRentalModel() {
+		em = EMF.get().createEntityManager();
 	}
 		
 	/**
@@ -45,8 +54,7 @@ public class CarRentalModel {
      * @return	the list of car rental companies
      */
     public Collection<String> getAllRentalCompanyNames() {
-		// FIXME use persistence instead
-    	return CRCS.keySet();
+		return em.createNamedQuery("CarRentalCompany.getAllNames", String.class).getResultList();
     }
 	
 	/**
@@ -143,6 +151,9 @@ public class CarRentalModel {
      * @return	The list of car types in the given car rental company.
      */
     public Collection<CarType> getCarTypesOfCarRentalCompany(String crcName) {
+    	return em.createNamedQuery("CarRentalCompany.getAllTypesByName", CarType.class)
+    			.setParameter("", arg1)
+    	
 		// FIXME: use persistence instead
 
     	CarRentalCompany crc = CRCS.get(crcName);

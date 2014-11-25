@@ -2,11 +2,18 @@ package ds.gae.entities;
 
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class Quote {
-
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
     private Date startDate;
     private Date endDate;
     private String carRenter;
@@ -27,7 +34,10 @@ public class Quote {
         this.rentalPrice = rentalPrice;
     }
 
-    public Date getStartDate() {
+    public Quote() {
+	}
+
+	public Date getStartDate() {
         return startDate;
     }
 
