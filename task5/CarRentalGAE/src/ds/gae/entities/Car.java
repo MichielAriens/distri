@@ -4,8 +4,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Car {
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private CarType type;
     private Set<Reservation> reservations;
@@ -13,6 +21,10 @@ public class Car {
     /***************
      * CONSTRUCTOR *
      ***************/
+    
+    public Car(){
+    	
+    }
     
     public Car(int uid, CarType type) {
     	this.id = uid;
