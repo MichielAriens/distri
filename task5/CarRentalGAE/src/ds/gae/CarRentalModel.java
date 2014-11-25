@@ -3,6 +3,7 @@ package ds.gae;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,7 @@ import ds.gae.entities.ReservationConstraints;
  
 public class CarRentalModel {
 	
-	//public Map<String,CarRentalCompany> CRCS = new HashMap<String, CarRentalCompany>();	
+	public Map<String,CarRentalCompany> CRCS = new HashMap<String, CarRentalCompany>();	
 	
 	private static CarRentalModel instance;
 
@@ -44,8 +45,9 @@ public class CarRentalModel {
 	 * 			in the given car rental company.
 	 */
 	public Set<String> getCarTypesNames(String crcName) {
-		// TODO add implementation
-    	return null;
+		return new HashSet<>(em.createNamedQuery("CarRentalCompany.getAllTypeNamesByName", String.class)
+				.setParameter("name", crcName)
+				.getResultList());
 	}
 
     /**
@@ -152,13 +154,8 @@ public class CarRentalModel {
      */
     public Collection<CarType> getCarTypesOfCarRentalCompany(String crcName) {
     	return em.createNamedQuery("CarRentalCompany.getAllTypesByName", CarType.class)
-    			.setParameter("", arg1)
-    	
-		// FIXME: use persistence instead
-
-    	CarRentalCompany crc = CRCS.get(crcName);
-    	Collection<CarType> out = new ArrayList<CarType>(crc.getAllCarTypes());
-        return out;
+    			.setParameter("name", crcName)
+    			.getResultList();
     }
 	
     /**
