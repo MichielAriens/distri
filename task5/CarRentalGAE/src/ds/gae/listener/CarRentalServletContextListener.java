@@ -21,10 +21,10 @@ import ds.gae.entities.CarType;
 
 public class CarRentalServletContextListener implements ServletContextListener {
 	
-	private EntityManager em;
+	//private EntityManager em;
 	
 	public CarRentalServletContextListener() {
-		em = EMF.get().createEntityManager();
+		//em = EMF.get().createEntityManager();
 	}
 
 	@Override
@@ -40,11 +40,16 @@ public class CarRentalServletContextListener implements ServletContextListener {
 	
 	private boolean isDummyDataAvailable() {
 		// If the Hertz car rental company is in the datastore, we assume the dummy data is available
+		EntityManager em = EMF.get().createEntityManager();
+		try{
+			return em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+					.setParameter("name", "Hertz")
+					.getResultList()
+					.size() == 1;
+		}finally{
+			em.close();
+		}
 		
-		return em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
-				.setParameter("name", "Hertz")
-				.getResultList()
-				.size() == 1;
 	}
 	
 	private void addDummyData() {
@@ -54,8 +59,8 @@ public class CarRentalServletContextListener implements ServletContextListener {
 	
 	private void loadRental(String name, String datafile) {
 		Logger.getLogger(CarRentalServletContextListener.class.getName()).log(Level.INFO, "loading {0} from file {1}", new Object[]{name, datafile});
+		EntityManager em = EMF.get().createEntityManager();
         try {
-        	
             Set<Car> cars = loadData(name, datafile);
             CarRentalCompany company = new CarRentalCompany(name, cars);
             
@@ -67,6 +72,8 @@ public class CarRentalServletContextListener implements ServletContextListener {
             Logger.getLogger(CarRentalServletContextListener.class.getName()).log(Level.SEVERE, "bad file", ex);
         } catch (IOException ex) {
             Logger.getLogger(CarRentalServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+        	em.close();
         }
 	}
 	

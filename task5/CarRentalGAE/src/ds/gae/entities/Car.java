@@ -9,12 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.google.appengine.api.datastore.Key;
+
 @Entity
 public class Car {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Key id;
     private CarType type;
     private Set<Reservation> reservations;
 
@@ -36,8 +38,8 @@ public class Car {
      * ID *
      ******/
     
-    public int getId() {
-    	return id;
+    public long getId() {
+    	return id.getId();
     }
     
     /************

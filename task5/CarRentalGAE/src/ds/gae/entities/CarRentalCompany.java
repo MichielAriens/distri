@@ -11,13 +11,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 import ds.gae.ReservationException;
 
@@ -46,9 +47,10 @@ public class CarRentalCompany {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	
 	private String name;
+	@OneToMany(cascade = CascadeType.ALL)  
 	private Set<Car> cars;
 	private Map<String,CarType> carTypes = new HashMap<String, CarType>();
 
@@ -115,7 +117,7 @@ public class CarRentalCompany {
 	 * CARS *
 	 *********/
 	
-	private Car getCar(int uid) {
+	private Car getCar(long uid) {
 		for (Car car : cars) {
 			if (car.getId() == uid)
 				return car;
