@@ -17,9 +17,9 @@ import javax.persistence.NamedQuery;
 })
 public class Reservation extends Quote {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	//@Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private int id;
 	
     private int carId;
     

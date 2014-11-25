@@ -60,6 +60,7 @@ public class CarRentalServletContextListener implements ServletContextListener {
             CarRentalCompany company = new CarRentalCompany(name, cars);
             
     		em.persist(company);
+    		//em.flush();
             //CarRentalModel.get().CRCS.put(name, company);
 
         } catch (NumberFormatException ex) {
