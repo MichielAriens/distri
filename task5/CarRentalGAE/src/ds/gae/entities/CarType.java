@@ -28,6 +28,10 @@ public class CarType {
     	
     }
     
+    public Key getKey(){
+    	return this.id;
+    }
+    
     public CarType(String name, int nbOfSeats, float trunkSpace, double rentalPricePerDay, boolean smokingAllowed) {
         this.name = name;
         this.nbOfSeats = nbOfSeats;

@@ -63,9 +63,9 @@ public class CarRentalServletContextListener implements ServletContextListener {
         try {
             Set<Car> cars = loadData(name, datafile);
             CarRentalCompany company = new CarRentalCompany(name, cars);
-            for(CarType type: company.getAllCarTypes()){
-            	em.persist(type);
-            }
+            //for(CarType type: company.getAllCarTypes()){
+            //	em.persist(type);
+            //}
     		em.persist(company);
             //CarRentalModel.get().CRCS.put(name, company);
 
