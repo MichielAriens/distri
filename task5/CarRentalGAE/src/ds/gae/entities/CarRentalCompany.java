@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,8 +22,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import com.google.appengine.api.datastore.Key;
-
+import ds.gae.EMF;
 import ds.gae.ReservationException;
 
 @Entity
@@ -52,26 +52,23 @@ public class CarRentalCompany {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	//private long id;
 	private String name;
-	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carRentalCompany")
-	private Set<Car> cars;
-	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carRentalCompany")
+	@OneToMany(cascade = CascadeType.ALL)
 	@MapKey(name = "name")
-	private Map<String,CarType> carTypes = new HashMap<String, CarType>();
+	private Map<String, CarType> carTypes = new HashMap<>();
 
 	/***************
 	 * CONSTRUCTOR *
 	 ***************/
 	
 	public CarRentalCompany(){
-		this.cars = new HashSet<>();
 	}
 
-	public CarRentalCompany(String name, Set<Car> cars) {
+	public CarRentalCompany(String name, Set<CarType> types) {
 		logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);
 		setName(name);
-		this.cars = cars;
-		for(Car car:cars)
-			carTypes.put(car.getType().getName(), car.getType());
+		for(CarType ct : types){
+			carTypes.put(ct.getName(), ct);
+		}
 	}
 
 	/********
@@ -95,6 +92,7 @@ public class CarRentalCompany {
 	}
 	
 	public CarType getCarType(String carTypeName) {
+		//FIXME change to query.
 		if(carTypes.containsKey(carTypeName))
 			return carTypes.get(carTypeName);
 		throw new IllegalArgumentException("<" + carTypeName + "> No car type of name " + carTypeName);
@@ -109,7 +107,7 @@ public class CarRentalCompany {
 	
 	public Set<CarType> getAvailableCarTypes(Date start, Date end) {
 		Set<CarType> availableCarTypes = new HashSet<CarType>();
-		for (Car car : cars) {
+		for (Car car : getCars()) {
 			if (car.isAvailable(start, end)) {
 				availableCarTypes.add(car.getType());
 			}
@@ -122,20 +120,29 @@ public class CarRentalCompany {
 	 *********/
 	
 	private Car getCar(long uid) {
-		for (Car car : cars) {
-			if (car.getId() == uid)
-				return car;
+		EntityManager em = EMF.get().createEntityManager();
+		try{
+			Car car = em.find(Car.class, uid);
+			if (car == null){
+				throw new IllegalArgumentException("<" + name + "> No car with uid " + uid);
+			}
+			return car;
+		}finally{
+			em.close();
 		}
-		throw new IllegalArgumentException("<" + name + "> No car with uid " + uid);
 	}
 	
 	public Set<Car> getCars() {
-    	return cars;
+    	Set<Car> retval = new HashSet<Car>();
+    	for(CarType ct : this.getAllCarTypes()){
+    		retval.addAll(ct.getCars());
+    	}
+    	return retval;
     }
 	
 	private List<Car> getAvailableCars(String carType, Date start, Date end) {
 		List<Car> availableCars = new LinkedList<Car>();
-		for (Car car : cars) {
+		for (Car car : getCars()) {
 			if (car.getType().getName().equals(carType) && car.isAvailable(start, end)) {
 				availableCars.add(car);
 			}

@@ -23,12 +23,8 @@ public class Car {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key id;
-	//@ManyToOne(cascade = CascadeType.ALL)
-    //private CarType type;
-	
-	private Key typeId;
 	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carId")
-    private Set<Reservation> reservations;
+    private Set<Reservation> reservations = new HashSet<Reservation>();
 
     /***************
      * CONSTRUCTOR *
@@ -36,12 +32,6 @@ public class Car {
     
     public Car(){
     	
-    }
-    
-    public Car(int uid, CarType type) {
-    	//this.id = uid;
-        this.typeId = type.getKey();
-        this.reservations = new HashSet<Reservation>();
     }
 
     /******
@@ -59,7 +49,7 @@ public class Car {
     public CarType getType() {
     	EntityManager em = EMF.get().createEntityManager();
     	try{
-    		return em.find(CarType.class, typeId);
+    		return em.find(CarType.class, id.getParent());
     	}finally{
     		em.close();
     	}

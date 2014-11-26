@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import ds.gae.CarRentalModel;
 import ds.gae.EMF;
 import ds.gae.entities.Car;
 import ds.gae.entities.CarRentalCompany;
@@ -61,13 +60,9 @@ public class CarRentalServletContextListener implements ServletContextListener {
 		Logger.getLogger(CarRentalServletContextListener.class.getName()).log(Level.INFO, "loading {0} from file {1}", new Object[]{name, datafile});
 		EntityManager em = EMF.get().createEntityManager();
         try {
-            Set<Car> cars = loadData(name, datafile);
-            CarRentalCompany company = new CarRentalCompany(name, cars);
-            //for(CarType type: company.getAllCarTypes()){
-            //	em.persist(type);
-            //}
+            Set<CarType> carTypes = loadData(name, datafile);
+            CarRentalCompany company = new CarRentalCompany(name, carTypes);
     		em.persist(company);
-            //CarRentalModel.get().CRCS.put(name, company);
 
         } catch (NumberFormatException ex) {
             Logger.getLogger(CarRentalServletContextListener.class.getName()).log(Level.SEVERE, "bad file", ex);
@@ -78,10 +73,14 @@ public class CarRentalServletContextListener implements ServletContextListener {
         }
 	}
 	
-	public static Set<Car> loadData(String name, String datafile) throws NumberFormatException, IOException {
+	public static Set<CarType> loadData(String name, String datafile) throws NumberFormatException, IOException {
 		// FIXME: adapt the implementation of this method to your entity structure
+		// TODO: pass the em along: find the cartypes first and persist.
+		//							Cars have indirect pointer to types and crc becomes parent of the types and the cars
 		
-		Set<Car> cars = new HashSet<Car>();
+		// Alternatve: Tree structure with crc < type < car.
+		
+		Set<CarType> types = new HashSet<CarType>();
 		int carId = 1;
 
 		//open file from jar
@@ -104,11 +103,12 @@ public class CarRentalServletContextListener implements ServletContextListener {
 					Boolean.parseBoolean(csvReader.nextToken()));
 			//create N new cars with given type, where N is the 5th field
 			for (int i = Integer.parseInt(csvReader.nextToken()); i > 0; i--) {
-				cars.add(new Car(carId++, type));
+				type.addCar(new Car());
 			}
+			types.add(type);
 		}
 
-		return cars;
+		return types;
 	}
 
 	@Override

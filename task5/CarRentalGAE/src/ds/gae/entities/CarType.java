@@ -1,9 +1,15 @@
 package ds.gae.entities;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -13,6 +19,10 @@ public class CarType {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key id;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	private Set<Car> cars = new HashSet<>();
+	
     private String name;
     private int nbOfSeats;
     private boolean smokingAllowed;
@@ -58,6 +68,14 @@ public class CarType {
     
     public float getTrunkSpace() {
     	return trunkSpace;
+    }
+    
+    public Collection<Car> getCars(){
+    	return cars;
+    }
+    
+    public void addCar(Car car){
+    	this.cars.add(car);
     }
     
     /*************
