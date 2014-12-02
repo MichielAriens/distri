@@ -33,7 +33,7 @@ public class CarRentalModel {
 	}
 	
 	public CarRentalModel() {
-		em = EMF.get().createEntityManager();
+		//em = EMF.get().createEntityManager();
 	}
 		
 	/**
@@ -88,7 +88,7 @@ public class CarRentalModel {
 		// FIXME: use persistence instead
     	EntityManager em = EMF.get().createEntityManager();
     	try{
-	    	List<CarRentalCompany> results = em.createNativeQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+	    	List<CarRentalCompany> results = em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
 	    			.setParameter("name", company)
 	    			.getResultList();
 	    	if(results.size() != 1){
@@ -121,7 +121,7 @@ public class CarRentalModel {
 	public void confirmQuote(Quote q) throws ReservationException {
 		EntityManager em = EMF.get().createEntityManager();
 		try{
-			List<CarRentalCompany> results = em.createNativeQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+			List<CarRentalCompany> results = em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
 	    			.setParameter("name", q.getRentalCompany())
 	    			.getResultList();
 	    	if(results.size() != 1){
@@ -178,6 +178,10 @@ public class CarRentalModel {
     public Collection<CarType> getCarTypesOfCarRentalCompany(String crcName) {
     	EntityManager em = EMF.get().createEntityManager();
     	try {
+			List<Object> results =  em.createNamedQuery("CarRentalCompany.getAllTypesByName")
+					.setParameter("name", crcName)
+					.getResultList();
+			System.out.println(results);
 			return em.createNamedQuery("CarRentalCompany.getAllTypesByName", CarType.class)
 					.setParameter("name", crcName)
 					.getResultList();
