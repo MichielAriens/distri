@@ -45,9 +45,14 @@ public class CarRentalModel {
 	 * 			in the given car rental company.
 	 */
 	public Set<String> getCarTypesNames(String crcName) {
-		return new HashSet<>(em.createNamedQuery("CarRentalCompany.getAllTypeNamesByName", String.class)
-				.setParameter("name", crcName)
-				.getResultList());
+		EntityManager em = EMF.get().createEntityManager();
+		try {
+			return new HashSet<>(em.createNamedQuery("CarRentalCompany.getAllTypeNamesByName", String.class)
+					.setParameter("name", crcName)
+					.getResultList());
+		} finally {
+			em.close();
+		}
 	}
 
     /**
@@ -56,7 +61,13 @@ public class CarRentalModel {
      * @return	the list of car rental companies
      */
     public Collection<String> getAllRentalCompanyNames() {
-		return em.createNamedQuery("CarRentalCompany.getAllNames", String.class).getResultList();
+    	EntityManager em = EMF.get().createEntityManager();
+		try {
+			return em.createNamedQuery("CarRentalCompany.getAllNames", String.class).getResultList();
+		} finally {
+			em.close();
+		}
+		
     }
 	
 	/**
@@ -147,9 +158,14 @@ public class CarRentalModel {
 	 * @return	the list of reservations of the given car renter
 	 */
 	public List<Reservation> getReservations(String renter) {
-		return em.createNamedQuery("Reservation.getByRenter", Reservation.class)
-				.setParameter("name", renter)
-				.getResultList();
+		EntityManager em = EMF.get().createEntityManager();
+		try {
+			return em.createNamedQuery("Reservation.getByRenter", Reservation.class)
+					.setParameter("name", renter)
+					.getResultList();
+		} finally {
+			em.close();
+		}
     }
 
     /**
@@ -160,9 +176,14 @@ public class CarRentalModel {
      * @return	The list of car types in the given car rental company.
      */
     public Collection<CarType> getCarTypesOfCarRentalCompany(String crcName) {
-    	return em.createNamedQuery("CarRentalCompany.getAllTypesByName", CarType.class)
-    			.setParameter("name", crcName)
-    			.getResultList();
+    	EntityManager em = EMF.get().createEntityManager();
+    	try {
+			return em.createNamedQuery("CarRentalCompany.getAllTypesByName", CarType.class)
+					.setParameter("name", crcName)
+					.getResultList();
+		} finally {
+			em.close();
+		}
     }
 	
     /**
@@ -205,11 +226,15 @@ public class CarRentalModel {
 	 * @return	List of cars of the given car type
 	 */
 	private List<Car> getCarsByCarType(String crcName, CarType carType) {				
-		
-		return em.createNamedQuery("CarRentalCompany.getCarsByCarType", Car.class)
-				.setParameter("name", crcName)
-				.setParameter("carType", carType)
-				.getResultList();
+		EntityManager em = EMF.get().createEntityManager();
+		try {
+			return em.createNamedQuery("CarRentalCompany.getCarsByCarType", Car.class)
+					.setParameter("name", crcName)
+					.setParameter("carType", carType)
+					.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	/**
