@@ -178,13 +178,15 @@ public class CarRentalModel {
     public Collection<CarType> getCarTypesOfCarRentalCompany(String crcName) {
     	EntityManager em = EMF.get().createEntityManager();
     	try {
-			List<Object> results =  em.createNamedQuery("CarRentalCompany.getAllTypesByName")
+			List<HashMap> results =  em.createNamedQuery("CarRentalCompany.getAllTypesByName", HashMap.class)
 					.setParameter("name", crcName)
 					.getResultList();
-			System.out.println(results);
-			return em.createNamedQuery("CarRentalCompany.getAllTypesByName", CarType.class)
-					.setParameter("name", crcName)
-					.getResultList();
+			if(results.size() != 1){
+				throw new IllegalArgumentException("getCarTypesOfCarRentalCompany failed");
+			}
+			HashMap<String, CarType> map = results.get(0);
+			return map.values();
+			
 		} finally {
 			em.close();
 		}
@@ -229,13 +231,18 @@ public class CarRentalModel {
 	 * 			the given car type
 	 * @return	List of cars of the given car type
 	 */
-	private List<Car> getCarsByCarType(String crcName, CarType carType) {				
+	private List<Car> getCarsByCarType(String crcName, CarType carType) {
 		EntityManager em = EMF.get().createEntityManager();
-		try {
-			return em.createNamedQuery("CarRentalCompany.getCarsByCarType", Car.class)
+    	try {
+			List<HashMap> results =  em.createNamedQuery("CarRentalCompany.getAllTypesByName", HashMap.class)
 					.setParameter("name", crcName)
-					.setParameter("carType", carType)
 					.getResultList();
+			if(results.size() != 1){
+				throw new IllegalArgumentException("getCarTypesOfCarRentalCompany failed");
+			}
+			HashMap<String, CarType> map = results.get(0);
+			return new ArrayList<>(map.get(carType.getName()).getCars());
+			
 		} finally {
 			em.close();
 		}
