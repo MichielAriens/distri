@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+import com.google.appengine.api.datastore.Transaction;
 
 import ds.gae.entities.Car;
 import ds.gae.entities.CarRentalCompany;
@@ -146,6 +149,39 @@ public class CarRentalModel {
 	 * 			Therefore none of the given quotes is confirmed.
 	 */
     public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException {    	
+    	Map<String, EntityTransaction> trxMap = new HashMap<>();
+    	EntityManager em = EMF.get().createEntityManager();
+    	for(Quote quote : quotes){
+    		if(!trxMap.containsKey(quote.getRentalCompany())){
+    			trxMap.put(quote.getRentalCompany(), em.getTransaction());
+    		}
+    	}
+    	boolean rollback = false;
+    	try{
+    		for(Quote quote : quotes){
+    			try{
+    				confirmQuote(quote);
+    			}catch (ReservationException e) {
+					rollback = true;
+				}
+    		}
+    		if(! rollback){
+    			System.out.println("successfull commit");
+	    		for(EntityTransaction trx : trxMap.values()){
+	    			trx.commit();
+	    		}
+    		}
+    	}finally{
+    		if(rollback){
+    			System.out.println("Rolling back!");
+    			for(EntityTransaction trx : trxMap.values()){
+        			trx.rollback();
+        		}
+    		}
+    		em.close();
+    	}
+    	
+    	
 		// TODO add implementation
     	return null;
     }
