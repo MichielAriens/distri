@@ -237,10 +237,10 @@ public class CarRentalModel {
      * 			the given car type
      * @return	A list of car IDs of cars with the given car type.
      */
-    public Collection<Long> getCarIdsByCarType(String crcName, CarType carType) {
-    	Collection<Long> out = new ArrayList<>();
+    public Collection<Integer> getCarIdsByCarType(String crcName, CarType carType) {
+    	Collection<Integer> out = new ArrayList<>();
     	for (Car c : getCarsByCarType(crcName, carType)) {
-    		out.add(c.getId());
+    		out.add(new Integer((int) c.getId()));
     	}
     	return out;
     }
