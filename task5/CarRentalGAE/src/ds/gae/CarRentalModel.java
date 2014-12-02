@@ -48,14 +48,11 @@ public class CarRentalModel {
 	 * 			in the given car rental company.
 	 */
 	public Set<String> getCarTypesNames(String crcName) {
-		EntityManager em = EMF.get().createEntityManager();
-		try {
-			return new HashSet<>(em.createNamedQuery("CarRentalCompany.getAllTypeNamesByName", String.class)
-					.setParameter("name", crcName)
-					.getResultList());
-		} finally {
-			em.close();
+		Set<String> retval = new HashSet<String>();
+		for(CarType type : getCarTypesOfCarRentalCompany(crcName)){
+			retval.add(type.getName());
 		}
+		return retval;
 	}
 
     /**
@@ -124,17 +121,21 @@ public class CarRentalModel {
 	public void confirmQuote(Quote q) throws ReservationException {
 		EntityManager em = EMF.get().createEntityManager();
 		try{
-			List<CarRentalCompany> results = em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
-	    			.setParameter("name", q.getRentalCompany())
-	    			.getResultList();
-	    	if(results.size() != 1){
-	    		throw new ReservationException("In createQuote: " + results.size() + " companies found with that name!");
-	    	}
-	    	CarRentalCompany crc = results.get(0);
-	        crc.confirmQuote(q);
+			confirmQuote(q,em);
 		}finally{
 			em.close();
 		}
+	}
+	
+	public void confirmQuote(Quote q, EntityManager em) throws ReservationException {
+		List<CarRentalCompany> results = em.createNamedQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+    			.setParameter("name", q.getRentalCompany())
+    			.getResultList();
+    	if(results.size() != 1){
+    		throw new ReservationException("In createQuote: " + results.size() + " companies found with that name!");
+    	}
+    	CarRentalCompany crc = results.get(0);
+        crc.confirmQuote(q);
 	}
 	
     /**
@@ -149,36 +150,48 @@ public class CarRentalModel {
 	 * 			Therefore none of the given quotes is confirmed.
 	 */
     public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException {    	
-    	Map<String, EntityTransaction> trxMap = new HashMap<>();
-    	EntityManager em = EMF.get().createEntityManager();
+    	Map<String, EntityManager> trxMap = new HashMap<>();
     	for(Quote quote : quotes){
     		if(!trxMap.containsKey(quote.getRentalCompany())){
-    			trxMap.put(quote.getRentalCompany(), em.getTransaction());
+    			EntityManager em = EMF.get().createEntityManager();
+    			em.getTransaction().begin();
+    			trxMap.put(quote.getRentalCompany(), em);
     		}
     	}
     	boolean rollback = false;
     	try{
-    		for(Quote quote : quotes){
-    			try{
-    				confirmQuote(quote);
-    			}catch (ReservationException e) {
-					rollback = true;
-				}
-    		}
+    		try{
+	    		for(Quote quote : quotes){
+	    				confirmQuote(quote, trxMap.get(quote.getRentalCompany()));
+	    			}
+    		}catch (ReservationException e) {
+				rollback = true;
+			}
     		if(! rollback){
-    			System.out.println("successfull commit");
-	    		for(EntityTransaction trx : trxMap.values()){
-	    			trx.commit();
+	    		for(EntityManager em : trxMap.values()){
+	    			em.getTransaction().commit();
 	    		}
+	    		System.out.println("successfull commit");
     		}
     	}finally{
     		if(rollback){
     			System.out.println("Rolling back!");
-    			for(EntityTransaction trx : trxMap.values()){
-        			trx.rollback();
+    			for(EntityManager em : trxMap.values()){
+        			em.getTransaction().rollback();
         		}
     		}
-    		em.close();
+    			
+			for(EntityManager em : trxMap.values()){
+				if(em.getTransaction().isActive())
+					em.getTransaction().rollback();
+    		}
+    		
+    		for(EntityManager em : trxMap.values()){
+    			em.close();
+    		}
+    		if(rollback){
+    			throw new ReservationException("Reservaton in batch failed");
+    		}
     	}
     	
     	
