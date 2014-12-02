@@ -53,7 +53,7 @@ public class CarRentalCompany {
 	//private long id;
 	private String name;
 	@OneToMany(cascade = CascadeType.ALL)
-	@MapKey(name = "name")
+	@MapKey(name = "typeName")
 	private Map<String, CarType> carTypes = new HashMap<>();
 
 	/***************

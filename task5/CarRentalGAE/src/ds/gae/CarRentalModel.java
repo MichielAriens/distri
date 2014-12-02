@@ -19,11 +19,11 @@ import ds.gae.entities.ReservationConstraints;
  
 public class CarRentalModel {
 	
-	public Map<String,CarRentalCompany> CRCS = new HashMap<String, CarRentalCompany>();	
+	//public Map<String,CarRentalCompany> CRCS = new HashMap<String, CarRentalCompany>();	
 	
 	private static CarRentalModel instance;
 
-	private EntityManager em;
+	//private EntityManager em;
 	
 	
 	public static CarRentalModel get() {
@@ -75,17 +75,27 @@ public class CarRentalModel {
 	 */
     public Quote createQuote(String company, String renterName, ReservationConstraints constraints) throws ReservationException {
 		// FIXME: use persistence instead
-    	
-    	CarRentalCompany crc = CRCS.get(company);
-    	Quote out = null;
-
-        if (crc != null) {
-            out = crc.createQuote(constraints, renterName);
-        } else {
-        	throw new ReservationException("CarRentalCompany not found.");    	
-        }
-        
-        return out;
+    	EntityManager em = EMF.get().createEntityManager();
+    	try{
+	    	List<CarRentalCompany> results = em.createNativeQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+	    			.setParameter("name", company)
+	    			.getResultList();
+	    	if(results.size() != 1){
+	    		throw new ReservationException("In createQuote: " + results.size() + " companies found with that name!");
+	    	}
+	    	CarRentalCompany crc = results.get(0);
+	    			
+	    	Quote out = null;
+	
+	        if (crc != null) {
+	            out = crc.createQuote(constraints, renterName);
+	        } else {
+	        	throw new ReservationException("CarRentalCompany not found.");    	
+	        }
+	        return out;
+    	}finally{
+    		em.close();
+    	}
     }
     
 	/**
@@ -98,10 +108,19 @@ public class CarRentalModel {
 	 * 			Confirmation of given quote failed.	
 	 */
 	public void confirmQuote(Quote q) throws ReservationException {
-		// FIXME: use persistence instead
-
-		CarRentalCompany crc = CRCS.get(q.getRentalCompany());
-        crc.confirmQuote(q);
+		EntityManager em = EMF.get().createEntityManager();
+		try{
+			List<CarRentalCompany> results = em.createNativeQuery("CarRentalCompany.getByName", CarRentalCompany.class)
+	    			.setParameter("name", q.getRentalCompany())
+	    			.getResultList();
+	    	if(results.size() != 1){
+	    		throw new ReservationException("In createQuote: " + results.size() + " companies found with that name!");
+	    	}
+	    	CarRentalCompany crc = results.get(0);
+	        crc.confirmQuote(q);
+		}finally{
+			em.close();
+		}
 	}
 	
     /**
