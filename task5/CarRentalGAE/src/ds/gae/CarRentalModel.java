@@ -149,7 +149,7 @@ public class CarRentalModel {
 	 * 			One of the quotes cannot be confirmed. 
 	 * 			Therefore none of the given quotes is confirmed.
 	 */
-    public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException {    	
+    public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException {    
     	Map<String, EntityManager> trxMap = new HashMap<>();
     	for(Quote quote : quotes){
     		if(!trxMap.containsKey(quote.getRentalCompany())){

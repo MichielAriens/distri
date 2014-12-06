@@ -51,7 +51,7 @@ public class CarRentalCompany {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	//private long id;
-	private String name;
+	private String name; 
 	@OneToMany(cascade = CascadeType.ALL)
 	@MapKey(name = "typeName")
 	private Map<String, CarType> carTypes = new HashMap<>();
