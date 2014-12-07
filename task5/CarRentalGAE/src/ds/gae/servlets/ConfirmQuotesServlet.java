@@ -4,7 +4,6 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 import ds.gae.EMF;
 import ds.gae.entities.Quote;
@@ -40,14 +40,19 @@ public class ConfirmQuotesServlet extends HttpServlet {
 		}
 		
 		EntityManager em = EMF.get().createEntityManager();
+		em.getTransaction().begin();
 		try{
 			QuoteBatch obj = new QuoteBatch(quotesList);
 			em.persist(obj);
+			em.getTransaction().commit();
 			Queue queue = QueueFactory.getDefaultQueue();
-			queue.add(withUrl("/worker").param("objectKey", "" + obj.getId()));
+			queue.add(withUrl("/worker").param("objectKey", "" + obj.getId()).method(Method.POST).taskName("ConfirmBatch_"+obj.getId()));
 			session.setAttribute("batchId", "" + obj.getId());
 			resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url());
 		}finally{
+			if(em.getTransaction().isActive()){
+				em.getTransaction().rollback();
+			}
 			em.close();
 		}
 	}

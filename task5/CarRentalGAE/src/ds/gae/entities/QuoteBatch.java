@@ -1,47 +1,39 @@
 package ds.gae.entities;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.Serialized;
-import javax.persistence.CascadeType;
+
+
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
-import com.google.appengine.api.datastore.Blob;
-
+/**
+ * Simple key value object storage. 
+ * @author Michiel
+ *
+ */
 @Entity
-public class QuoteBatch {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long objectId;
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class QuoteBatch extends StoredObject {
 	
 	private boolean processed = false;
 	private boolean successful = false;
 	
-	private List<Quote> allQuotes;
-	
 	public QuoteBatch(){
+		super();
 	}
 	
 	public QuoteBatch(List<Quote> allQuotes){
-		this.allQuotes = allQuotes;
+		super(allQuotes);
 	}
 	
-	public long getId(){
-		return objectId;
-	}
+	
 	
 	public List<Quote> getAllQuotes(){
-		return this.allQuotes;
+		return (List<Quote>) this.getStoredObject();
 	}
 
 	public void markProcessed(){
@@ -58,8 +50,6 @@ public class QuoteBatch {
 	}
 	
 	public boolean wasSuccessful(){
-		if(!this.processed)
-			throw new RuntimeException("Call to wasSuccessful() in QuoteBatch while not yet processed!");
 		return successful;
 	}
 }
