@@ -1,5 +1,25 @@
 <%@page import="ds.gae.view.JSPSite"%>
 <%@page import="ds.gae.CarRentalModel"%>
+<%
+boolean success = false;
+boolean proc = false;
+boolean valid = true;
+try{
+	String batchId = request.getParameter("batchId");
+	if(!CarRentalModel.get().batchProcessed(batchId)){
+		//nothing
+	}else{
+		proc = true;
+		if(CarRentalModel.get().batchSuccessful(batchId)){
+			success = true;
+		}else{
+			
+		}	
+	}
+}catch(Exception e){
+	valid = false;
+}
+%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -19,7 +39,9 @@ if (currentSite != JSPSite.LOGIN && currentSite != JSPSite.PERSIST_TEST && rente
   request.getSession().setAttribute("lastSiteCall", currentSite);
 } 
  %>
+ <%if(!proc && valid){%>
  	<meta http-equiv="refresh" content="2">
+ <%}%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<title>Car Rental Application</title>
@@ -57,19 +79,18 @@ for (JSPSite site : JSPSite.publiclyLinkedValues()) {
 				<div class="group">
 					<p>
 					<%
-					try{
-						String batchId = request.getParameter("batchId");
-						if(!CarRentalModel.get().batchProcessed(batchId)){
-							%>Your quotes have not yet been confirmed.<%
+					if(!valid){
+						%>Token not valid!<%
+					}else{
+						if(!proc){
+								%>Your quotes have not yet been confirmed.<%
 						}else{
-							if(CarRentalModel.get().batchSuccessful(batchId)){
+							if(success){
 								%>Your quotes have been confirmed!<%
 							}else{
 								%>Your quotes could not be confirmed.<%
 							}	
 						}
-					}catch(Exception e){
-						%> Token not valid! <%
 					}
 					%>
 					</p>
