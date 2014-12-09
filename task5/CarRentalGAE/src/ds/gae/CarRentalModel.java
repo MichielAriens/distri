@@ -11,12 +11,14 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Transaction;
 
 import ds.gae.entities.Car;
 import ds.gae.entities.CarRentalCompany;
 import ds.gae.entities.CarType;
 import ds.gae.entities.Quote;
+import ds.gae.entities.QuoteBatch;
 import ds.gae.entities.Reservation;
 import ds.gae.entities.ReservationConstraints;
  
@@ -308,4 +310,39 @@ public class CarRentalModel {
 	public boolean hasReservations(String renter) {
 		return this.getReservations(renter).size() > 0;		
 	}	
+	
+	public boolean batchProcessed(long id) throws NotFoundException{
+		EntityManager em = EMF.get().createEntityManager();
+		try{
+			QuoteBatch batch = em.find(QuoteBatch.class, id);
+			if(batch == null){
+				throw new NotFoundException("Batch not found");
+			}
+			return batch.isProcessed();
+		}finally{
+			em.close();
+		}
+	}
+	
+	public boolean batchProcessed(String id) throws NumberFormatException, NotFoundException{
+		return batchProcessed(Long.valueOf(id));
+	}
+	
+	
+	public boolean batchSuccessful(long id) throws NotFoundException{
+		EntityManager em = EMF.get().createEntityManager();
+		try{
+			QuoteBatch batch = em.find(QuoteBatch.class, id);
+			if(batch == null){
+				throw new NotFoundException("Batch not found");
+			}
+			return batch.wasSuccessful();
+		}finally{
+			em.close();
+		}
+	}
+	
+	public boolean batchSuccessful(String id) throws NumberFormatException, NotFoundException{
+		return batchSuccessful(Long.valueOf(id));
+	}
 }

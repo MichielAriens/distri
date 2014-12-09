@@ -18,7 +18,7 @@ public class Worker extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		super.doPost(req, resp);
+		//super.doPost(req, resp); Removed because this line causes a 405.
 		resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 		System.out.print("Preparing to process batch: ");
 		
@@ -33,13 +33,13 @@ public class Worker extends HttpServlet {
 			}
 			try{
 				System.out.println("" + quotes.getId());
-				if(quotes.wasSuccessful()){
+				if(quotes.isProcessed()){
 					System.out.println("Batch already processed, terminating...");
 					return;
 				}
 				quotes.markProcessed();
 				CarRentalModel.get().confirmQuotes(quotes.getAllQuotes());
-				QueueFactory.getDefaultQueue().deleteTask("ConfirmBatch_" + quotes.getId());
+				//QueueFactory.getDefaultQueue().deleteTask("ConfirmBatch_" + quotes.getId());
 				System.out.println("SUCCESS");
 				quotes.markSuccess(true);
 			}catch(ReservationException e){
@@ -56,5 +56,6 @@ public class Worker extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		doPost(req, resp);
+		
 	}
 }

@@ -47,8 +47,8 @@ public class ConfirmQuotesServlet extends HttpServlet {
 			em.getTransaction().commit();
 			Queue queue = QueueFactory.getDefaultQueue();
 			queue.add(withUrl("/worker").param("objectKey", "" + obj.getId()).method(Method.POST).taskName("ConfirmBatch_"+obj.getId()));
-			session.setAttribute("batchId", "" + obj.getId());
-			resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url());
+			//session.setAttribute("batchId", "" + obj.getId());
+			resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url() + "?batchId=" + obj.getId());
 		}finally{
 			if(em.getTransaction().isActive()){
 				em.getTransaction().rollback();
