@@ -24,8 +24,8 @@ public class Car {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key id;
-	@Persistent 
-	private int cid;
+
+	private Integer cid;
 	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carId")
     private Set<Reservation> reservations = new HashSet<Reservation>();
 
@@ -38,7 +38,7 @@ public class Car {
     }
 
     public Car(int i) {
-		cid = i;
+		cid = new Integer(i);
 	}
 
 	/******

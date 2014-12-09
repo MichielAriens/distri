@@ -75,13 +75,7 @@ public class CarRentalServletContextListener implements ServletContextListener {
         }
 	}
 	
-	public static Set<CarType> loadData(String name, String datafile) throws NumberFormatException, IOException {
-		// FIXME: adapt the implementation of this method to your entity structure
-		// TODO: pass the em along: find the cartypes first and persist.
-		//							Cars have indirect pointer to types and crc becomes parent of the types and the cars
-		
-		// Alternatve: Tree structure with crc < type < car.
-		
+	public static Set<CarType> loadData(String name, String datafile) throws NumberFormatException, IOException {		
 		Set<CarType> types = new HashSet<CarType>();
 		int carId = 1;
 
@@ -105,7 +99,8 @@ public class CarRentalServletContextListener implements ServletContextListener {
 					Boolean.parseBoolean(csvReader.nextToken()));
 			//create N new cars with given type, where N is the 5th field
 			for (int i = Integer.parseInt(csvReader.nextToken()); i > 0; i--) {
-				type.addCar(new Car(cid++));
+				type.addCar(new Car(cid));
+				cid = cid + 1;
 			}
 			types.add(type);
 		}
