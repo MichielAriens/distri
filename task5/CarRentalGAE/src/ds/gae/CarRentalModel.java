@@ -257,6 +257,23 @@ public class CarRentalModel {
     	for (Car c : getCarsByCarType(crcName, carType)) {
     		out.add(new Long(c.getId()));
     	}
+    	return out;
+    }
+    
+    /**
+     * Get the list of cars of the given car type in the given car rental company.
+     *
+     * @param	crcName
+	 * 			name of the car rental company
+     * @param 	carType
+     * 			the given car type
+     * @return	A list of car IDs of cars with the given car type.
+     */
+    public Collection<Integer> getCarDisplayIdsByCarType(String crcName, CarType carType) {
+    	Collection<Integer> out = new ArrayList<>();
+    	for (Car c : getCarsByCarType(crcName, carType)) {
+    		out.add(c.getCid());
+    	}
     	System.out.println(out);
     	return out;
     }

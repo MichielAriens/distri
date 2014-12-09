@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.jdo.annotations.Persistent;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -23,6 +24,8 @@ public class Car {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key id;
+	@Persistent 
+	private int cid;
 	@OneToMany(cascade = CascadeType.ALL)//, mappedBy = "carId")
     private Set<Reservation> reservations = new HashSet<Reservation>();
 
@@ -34,7 +37,11 @@ public class Car {
     	
     }
 
-    /******
+    public Car(int i) {
+		cid = i;
+	}
+
+	/******
      * ID *
      ******/
     
@@ -83,4 +90,9 @@ public class Car {
         // equals-method for Reservation is required!
         reservations.remove(reservation);
     }
+    
+    public int getCid(){
+    	return cid;
+    }
+   
 }

@@ -20,6 +20,8 @@ import ds.gae.entities.CarType;
 
 public class CarRentalServletContextListener implements ServletContextListener {
 	
+	private static int cid = 0;
+	
 	//private EntityManager em;
 	
 	public CarRentalServletContextListener() {
@@ -103,7 +105,7 @@ public class CarRentalServletContextListener implements ServletContextListener {
 					Boolean.parseBoolean(csvReader.nextToken()));
 			//create N new cars with given type, where N is the 5th field
 			for (int i = Integer.parseInt(csvReader.nextToken()); i > 0; i--) {
-				type.addCar(new Car());
+				type.addCar(new Car(cid++));
 			}
 			types.add(type);
 		}
