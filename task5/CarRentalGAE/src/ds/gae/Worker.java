@@ -15,16 +15,18 @@ import ds.gae.entities.QuoteBatch;
 public class Worker extends HttpServlet {
 	private static final long serialVersionUID = -7058685883212377590L;
 	
+	/**
+	 * given a batch id, worker will pull the relevant batch from the store. If already processed nothing will happen.
+	 * confirmQuotes will be tried. The success of the confirmation is stored in metadata.
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		//super.doPost(req, resp); Removed because this line causes a 405.
 		resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 		System.out.print("Preparing to process batch: ");
 		
 		long key = Long.parseLong(req.getParameter("objectKey"));
 		EntityManager em = EMF.get().createEntityManager();
-		//em.getTransaction().begin();
 		try {
 			QuoteBatch quotes = em.find(QuoteBatch.class, key);
 			if (quotes == null){
@@ -39,14 +41,12 @@ public class Worker extends HttpServlet {
 				}
 				quotes.markProcessed();
 				CarRentalModel.get().confirmQuotes(quotes.getAllQuotes());
-				//QueueFactory.getDefaultQueue().deleteTask("ConfirmBatch_" + quotes.getId());
 				System.out.println("SUCCESS");
 				quotes.markSuccess(true);
 			}catch(ReservationException e){
 				System.out.println("Reservation exception!");
 				quotes.markSuccess(false);
 			}
-			//em.getTransaction().commit();
 		}finally {
 			System.out.println("Done...");
 			em.close();

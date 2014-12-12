@@ -16,6 +16,10 @@ import javax.persistence.MappedSuperclass;
 
 import com.google.appengine.api.datastore.Blob;
 
+/**
+ * Stored any object as a blob.
+ *
+ */
 @Entity
 @MappedSuperclass
 public class StoredObject {

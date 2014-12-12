@@ -26,6 +26,9 @@ import ds.gae.view.JSPSite;
 @SuppressWarnings("serial")
 public class ConfirmQuotesServlet extends HttpServlet {
 	
+	/**
+	 * Builds a quotebatch and stores it. Then adds a task referencing that quotebatch to the queue.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)

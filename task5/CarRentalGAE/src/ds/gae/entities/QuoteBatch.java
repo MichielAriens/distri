@@ -11,7 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
- * Simple key value object storage. 
+ * Extends Stored object with metadata.  
  * @author Michiel
  *
  */

@@ -195,9 +195,7 @@ public class CarRentalModel {
     			throw new ReservationException("Reservaton in batch failed");
     		}
     	}
-    	
-    	
-		// TODO add implementation
+		// we decided to deprecate the return value. Reservations are stored in the db. 
     	return null;
     }
 	
